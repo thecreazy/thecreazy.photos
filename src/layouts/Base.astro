@@ -1,0 +1,27 @@
+---
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/covered-by-your-grace/400.css';
+import '@fontsource/nanum-pen-script/400.css';
+import '../styles/tokens.css';
+import { t } from '../i18n/en';
+
+interface Props { title?: string; description?: string; noindex?: boolean; bodyClass?: string; htmlClass?: string }
+const { title, description, noindex = false, bodyClass, htmlClass } = Astro.props;
+const full = title ? `${title} — ${t.brand}` : `${t.brand} — Photography`;
+---
+<!doctype html>
+<html lang="en" class={htmlClass}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{full}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </head>
+  <body class={bodyClass}><slot /></body>
+</html>

@@ -1,0 +1,21 @@
+:root {
+  --ink: #1d1a17;
+  --dim: #837a6f;
+  --paper: #f4efe6;
+  --light: #efe7da;
+  --mute: rgba(239, 231, 218, 0.5);
+  --bg: #0b0908;
+  --red: #c4162a; /* grease pencil */
+  --blue: #1d2a4a; /* pen ink */
+  --form-red: #8e2b20; /* envelope print */
+  --serif: 'Instrument Serif', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --marker: 'Covered By Your Grace', cursive;
+  --pen: 'Nanum Pen Script', cursive;
+  --t-paper: none; /* runtime-generated textures (scripts/project/textures.ts); plain colour until then */
+  --t-kraft: none;
+  --t-grain: none;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--light); font: 13px/1.45 var(--mono); }
+a { color: inherit; }

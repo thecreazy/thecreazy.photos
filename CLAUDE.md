@@ -1,0 +1,41 @@
+# photos.canellariccardo.it
+
+Riccardo Canella's photography portfolio. Replaces the current Adobe Portfolio site.
+Concept: **film and the darkroom**. Home = a scrolling film roll; a frame "develops" in the
+darkroom; every shooting has a page = **the lab envelope**.
+
+The visual reference is `reference/rullino.html` (validated prototype, HTML+JS in one file).
+The full spec is `docs/SPEC.md`. Read it before each phase.
+
+## Stack (decided)
+- Static **Astro**. **No React** or other UI frameworks.
+- **three.js** in plain JS/TS, only where needed (home: roll + darkroom), as a client-side
+  component loaded on the home page only.
+- Project pages = **real static HTML** (SEO, shareable URLs), effects as progressive JS.
+- Content in Astro Content Collections with a zod schema.
+- Images: `sharp` pipeline (`pnpm foto`), variants in `public/photos/` (gitignored), base URL in `PUBLIC_PHOTO_BASE_URL`; external storage (R2) to be decided at deploy time.
+- Hosting: Cloudflare Pages (to be confirmed).
+
+## Rules
+- The prototype is the source of truth for the **look & feel**: port shaders, timings and proportions
+  as they are, don't reinterpret them. The code, however, is restructured into modules.
+- Don't invent data (film stock, notes, print times): if missing, leave the field empty/optional.
+- Every effect needs a fallback: no WebGL → HTML list; `prefers-reduced-motion` →
+  no long animations (darkroom skipped, prints without the drop).
+- Site copy in **English** (`<html lang="en">`), all in `src/i18n/en.ts`: no strings scattered in components.
+- Package manager: **pnpm** (never npm/yarn).
+- Work in phases (SPEC § Phases). At the end of a phase: clean build, check in the browser, update the
+  status below.
+
+## Already discarded (don't propose again)
+Light table with props · overlapping strips, one per section · straightened vertical frames
+in the light · "editorial" project page (giant serif title + grid) ·
+print notebook · scotch-tape tabs for previous/next project · blotchy beige background.
+
+## Status
+- [ ] Phase 1 — skeleton, content schema, photo pipeline, migration (in progress: Astro + schema + `foto` + `migrate` written; still missing a test with real photos and a test deploy)
+- [ ] Phase 2 — project page (envelope): done and checked in the browser (envelope, negatives, prints, next envelope, Archive, Contact); missing real photos, mobile check (Phase 5) and Contact details
+- [ ] Phase 3 — home roll: done and checked in the browser with synthetic photos (roll, light, return from the project page, list fallback); 18+ gate removed (user decision); the clicked frame becomes the hero print via sessionStorage `rc.pick`; missing real photos, mobile (Phase 5), click → darkroom (Phase 4; for now it goes straight to the page)
+- [ ] Phase 4 — darkroom + transition
+- [ ] Phase 5 — mobile
+- [ ] Phase 6 — performance, fallbacks, going live

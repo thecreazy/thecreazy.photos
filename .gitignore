@@ -1,0 +1,30 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+*.log
+pnpm-debug.log*
+
+# environment variables (keep the example)
+.env
+.env.*
+!.env.example
+
+# photo pipeline: masters and generated variants stay out of git
+# (src/data/photos/*.json is tracked: the build needs it)
+masters/
+public/photos/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

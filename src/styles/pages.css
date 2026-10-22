@@ -1,0 +1,20 @@
+/* Ported from reference/rullino.html (lines 66–95, 'pg' pages: archive, contact). */
+.pg{max-width:1160px;margin:0 auto;padding:0 32px 120px}
+.pg-top{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:18px 0 22px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:linear-gradient(var(--paper) 72%,rgba(244,239,230,0))}
+.pg-top a{color:var(--ink);text-decoration:none;cursor:pointer}
+.pg-top a:hover{color:var(--red)}
+.pg h1{font:400 clamp(60px,10vw,150px)/.88 var(--serif);margin:40px 0 0;letter-spacing:-.015em}
+.pg h1 em{display:block;font-style:italic;color:#7a7065}
+.pg figure{margin:0}
+.pg h3{font:italic 400 34px var(--serif);margin:110px 0 22px}
+.pg h3 small{font:11px var(--mono);color:var(--dim);font-style:normal;margin-left:8px}
+.pg .arch a{display:flex;justify-content:space-between;gap:20px;align-items:baseline;padding:12px 0;border-bottom:1px solid #e2d9cb;color:var(--ink);text-decoration:none;cursor:pointer}
+.pg .arch a:hover{color:var(--red)}
+.pg .arch .n{font:400 clamp(22px,2.4vw,30px)/1.1 var(--serif)}
+.pg .arch .n em{color:#7a7065}
+.pg .arch .n b{font:500 10px var(--mono);color:var(--red);vertical-align:middle;margin-left:6px}
+.pg .arch .d{font-size:11px;color:var(--dim);white-space:nowrap;letter-spacing:.06em}
+.pg .contact{font:400 clamp(28px,3.4vw,46px)/1.35 var(--serif);margin-top:50px}
+.pg .contact span{display:block;font:11px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:28px}
+body.paper{background:var(--paper);color:var(--ink)}
+@media (max-width:760px){.pg{padding:0 16px 80px}}

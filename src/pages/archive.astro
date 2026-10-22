@@ -1,0 +1,31 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import { getShootings } from '../lib/shooting';
+import { SECTIONS } from '../content.config';
+import { t } from '../i18n/en';
+
+const all = await getShootings();
+---
+<Base title={t.archive.title} bodyClass="paper">
+  <div class="pg">
+    <div class="pg-top"><a href="/">{t.project.back}</a><span>{t.archive.count(all.length)}</span></div>
+    <h1>{t.archive.title}<em>{t.archive.sub}</em></h1>
+    {SECTIONS.map((sec) => {
+      const rs = all.filter((s) => s.section === sec);
+      return rs.length > 0 && (
+        <>
+          <h3>{t.sections[sec]} <small>{rs.length}</small></h3>
+          <div class="arch">
+            {rs.map((s) => (
+              <a href={`/${s.section}/${s.slug}/`}>
+                <span class="n">{s.name}{s.title && <> <em>{s.title}</em></>}</span>
+                <span class="d">{s.date} · {t.archive.photos(s.photos.length)}</span>
+              </a>
+            ))}
+          </div>
+        </>
+      );
+    })}
+  </div>
+</Base>

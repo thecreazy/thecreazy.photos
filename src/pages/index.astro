@@ -1,0 +1,63 @@
+---
+import '../styles/home.css';
+import Base from '../layouts/Base.astro';
+import { getShootings, photoUrl } from '../lib/shooting';
+import { SECTIONS } from '../content.config';
+import { HOME_LIMIT } from '../config';
+import { t } from '../i18n/en';
+import type { HomeData } from '../scripts/home/types';
+
+const all = await getShootings();
+const onRoll = SECTIONS.flatMap((sec) => all.filter((s) => s.section === sec && s.home).slice(0, HOME_LIMIT[sec]));
+const years = all.map((s) => +s.date.slice(0, 4));
+const span = years.length ? `${Math.min(...years)}—${Math.max(...years)}` : '';
+
+const data: HomeData = {
+  labels: {},
+  rolls: onRoll.map((s) => {
+    const shown = s.selected.map((i) => i - 1);
+    return {
+      slug: s.slug, href: `/${s.section}/${s.slug}/`, section: s.section, name: s.name, title: s.title, date: s.date,
+      stock: s.stockLabel, bw: !!s.bw, n: s.photos.length, shown,
+      film: shown.map((i) => photoUrl(s.slug, s.photos[i], 'film', 'webp')),
+      port: shown.map((i) => !!s.meta[s.photos[i]]?.portrait),
+    };
+  }),
+};
+---
+<Base bodyClass="home" htmlClass="home">
+  <canvas id="gl"></canvas>
+  <div id="vig"></div>
+  <div id="grain"></div>
+  <div id="fade"></div>
+  <header id="brand"><a href="/" style="text-decoration:none">{t.brand}</a><small>{t.brandSub}{span && ` · ${span}`}</small></header>
+  <nav id="nav" aria-label="Sections"></nav>
+  <div id="title"><div id="tSec"></div><h1 id="tName"></h1></div>
+  <div id="meta"></div>
+  <div id="timeline"><span id="tlMark"></span></div>
+  <div id="hint">{t.home.hint}</div>
+  <div id="loader"><div>{t.home.loading}</div><div id="bar"><i></i></div></div>
+
+  <main class="roll-list">
+    <h1>{t.brand}</h1>
+    {SECTIONS.map((sec) => {
+      const rs = all.filter((s) => s.section === sec);
+      return rs.length > 0 && (
+        <section>
+          <h2>{t.sections[sec]}</h2>
+          <ul>
+            {rs.map((s) => (
+              <li><a href={`/${s.section}/${s.slug}/`}><span>{s.name}{s.title && <> <em>{s.title}</em></>}</span><span class="d">{s.date}</span></a></li>
+            ))}
+          </ul>
+        </section>
+      );
+    })}
+    <p class="more"><a href="/archive/">{t.nav.archive}</a><a href="/contact/">{t.nav.contact}</a></p>
+  </main>
+
+  <script type="application/json" id="rolls-data" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />
+  <script>
+    import '../scripts/home/main';
+  </script>
+</Base>
