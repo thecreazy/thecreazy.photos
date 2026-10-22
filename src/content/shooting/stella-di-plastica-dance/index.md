@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 114
-# selected: [1, 2, 3]
+selected: [2, 8, 1]
 # hero: 1
 photos:
   - 01.jpg
@@ -24,5 +24,5 @@ photos:
   - 12.jpg
   - 13.jpg
   - 14.jpg
-# note: ""
+note: "A dancer in an old room, light from the side."
 ---

@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 108
-# selected: [1, 2, 3]
+selected: [4, 2, 6]
 # hero: 1
 photos:
   - 01.jpg
@@ -18,5 +18,5 @@ photos:
   - 06.jpg
   - 07.jpg
   - 08.jpg
-# note: ""
+note: "A chair, black gloves, a grey backdrop."
 ---

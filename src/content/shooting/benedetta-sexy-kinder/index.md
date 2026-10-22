@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 120
-# selected: [1, 2, 3]
+selected: [4, 1, 5]
 # hero: 1
 photos:
   - 01.jpg
@@ -16,5 +16,5 @@ photos:
   - 04.jpg
   - 05.jpg
   - 06.jpg
-# note: ""
+note: "Chocolate, pearls and a laugh."
 ---

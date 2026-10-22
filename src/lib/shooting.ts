@@ -20,8 +20,11 @@ export const WIDTHS = [800, 1400, 2200] as const;
 const dataFiles = import.meta.glob<PhotoData>('../data/photos/*.json', { eager: true, import: 'default' });
 const dataFor = (slug: string): PhotoData | undefined => dataFiles[`../data/photos/${slug}.json`];
 
-export const photoUrl = (slug: string, file: string, w: number | 'film', ext: 'avif' | 'webp') =>
+export const photoUrl = (slug: string, file: string, w: number, ext: 'avif' | 'webp') =>
   `${PHOTO_BASE}/${slug}/${file.replace(/\.[^.]+$/, '')}-${w}.${ext}`;
+
+/** 700px frame for the roll and the negatives sheet: always same-origin (`public/film`), because their pixels are read on a canvas. */
+export const filmUrl = (slug: string, file: string) => `/film/${slug}/${file.replace(/\.[^.]+$/, '')}-film.webp`;
 
 /** Fills in defaults so the frontmatter only states what Riccardo chose. */
 export function resolveShooting(entry: CollectionEntry<'shooting'>) {

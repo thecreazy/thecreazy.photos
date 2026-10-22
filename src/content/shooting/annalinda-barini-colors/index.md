@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 143
-# selected: [1, 2, 3]
+selected: [1, 4, 6]
 # hero: 1
 photos:
   - 01.jpg
@@ -16,5 +16,5 @@ photos:
   - 04.jpg
   - 05.jpg
   - 06.jpg
-# note: ""
+note: "A saffron scarf against a black backdrop."
 ---

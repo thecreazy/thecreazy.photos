@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 158
-# selected: [1, 2, 3]
+selected: [15, 1, 17]
 # hero: 1
 photos:
   - 01.jpg
@@ -28,5 +28,5 @@ photos:
   - 16.jpg
   - 17.jpg
   - 18.jpg
-# note: ""
+note: "Crowded coves, cliffs and salty hair."
 ---

@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 168
-# selected: [1, 2, 3]
+selected: [10, 22, 25]
 # hero: 1
 photos:
   - 01.jpg
@@ -36,5 +36,5 @@ photos:
   - 24.jpg
   - 25.jpg
   - 26.jpg
-# note: ""
+note: "Rope and bare light in an old wooden room."
 ---

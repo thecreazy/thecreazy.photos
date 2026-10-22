@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 162
-# selected: [1, 2, 3]
+selected: [16, 10, 3]
 # hero: 1
 photos:
   - 01.jpg
@@ -26,5 +26,5 @@ photos:
   - 14.jpg
   - 15.jpg
   - 16.jpg
-# note: ""
+note: "Quiet arcades and slow streets."
 ---

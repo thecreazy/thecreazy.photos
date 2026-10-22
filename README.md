@@ -5,7 +5,7 @@ Photography portfolio of Riccardo Canella, replacing the old Adobe Portfolio sit
 The whole site plays on **film and the darkroom**:
 
 - **Home** — a single 35 mm roll that scrolls past a light window. The frame in the light develops into a positive, the rest stays negative.
-- **Darkroom** — clicking that frame leads to the print, then to the shooting's page *(planned, Phase 4)*.
+- **Darkroom** — clicking that frame leads to the print, then to the shooting's page.
 - **Shooting page** — a **lab envelope**: the chosen print slides out of it, then the negatives sheet, then every other photo laid down as a print.
 - **Archive** and **Contact** — plain typographic pages.
 
@@ -34,12 +34,13 @@ Needs Node ≥ 22.23. The repo contains no photos (see below), so the roll is em
 | `pnpm build`       | Production build to `dist/`                                            |
 | `pnpm preview`     | Serve the build locally                                                |
 | `pnpm foto [slug]` | Build web variants from `masters/` (every shooting if no slug)         |
+| `pnpm upload`      | Copy `public/photos/` to the Spaces bucket (needs `rclone` remote `canellariccardo`) |
 | `pnpm migrate`     | One-off: draft shootings + `redirects.csv` scraped from the old site   |
 
 ## Adding a shooting
 
 1. **Export masters.** JPEGs, about 2500 px on the long side, into `masters/<slug>/` (gitignored).
-2. **Run `pnpm foto <slug>`.** It writes AVIF + WebP at 800 / 1400 / 2200 px and a 700 px film frame to `public/photos/<slug>/` (gitignored), and `src/data/photos/<slug>.json` with dimensions, orientation, B&W detection and blurhash. That JSON **is** committed: the build needs it. The script is incremental.
+2. **Run `pnpm foto <slug>`.** It writes AVIF + WebP at 800 / 1400 / 2200 px to `public/photos/<slug>/` (gitignored, uploaded with `pnpm upload`), a 700 px film frame to `public/film/<slug>/` (**committed**: the roll and the negatives read its pixels, so it is served from the site's own origin), and `src/data/photos/<slug>.json` with dimensions, orientation, B&W detection and blurhash. That JSON **is** committed: the build needs it. The script is incremental.
 3. **Write `src/content/shooting/<slug>/index.md`:**
 
 ```yaml
@@ -70,7 +71,7 @@ How many shootings of a section appear on the home is set in `src/config.ts` (`H
 
 | Variable                | Default   | Purpose                                              |
 | :---------------------- | :-------- | :--------------------------------------------------- |
-| `PUBLIC_PHOTO_BASE_URL` | `/photos` | Where the photo variants are served from (e.g. R2)   |
+| `PUBLIC_PHOTO_BASE_URL` | `/photos` | Where the photo variants are served from (e.g. Spaces) |
 
 All site copy lives in `src/i18n/en.ts`. The Contact page hides any line left empty there (email, Instagram, place).
 
@@ -90,7 +91,8 @@ src/
   styles/ · layouts/ · lib/ · i18n/
 tools/foto.mjs                    photo pipeline
 tools/migrate.mjs                 old-site import
-masters/ · public/photos/         originals and variants, not in git
+masters/ · public/photos/         originals and large variants, not in git
+public/film/                      700 px frames for roll and negatives, in git
 redirects.csv                     old URL → new URL, to wire up at deploy
 ```
 
@@ -101,7 +103,7 @@ redirects.csv                     old URL → new URL, to wire up at deploy
 | 1     | Skeleton, schema, photo pipeline, migration         | written; needs a test with real photos and a test deploy |
 | 2     | Shooting page (envelope, negatives, prints, next)   | done, checked with synthetic photos |
 | 3     | Home roll                                           | done, checked with synthetic photos |
-| 4     | Darkroom + transition                               | to do |
+| 4     | Darkroom + transition                               | done, checked with real photos (needs bucket CORS for the sharp large print) |
 | 5     | Mobile                                              | to do |
 | 6     | Performance, meta/OG, sitemap, redirects, DNS       | to do |
 
@@ -109,7 +111,7 @@ The 85 shootings imported by `pnpm migrate` are **drafts**: dates are year-only,
 
 ## Deploy
 
-Planned: Cloudflare Pages. Photo storage (R2 vs. bundled in Pages, which caps at ~20k files) is still to be decided; either way `PUBLIC_PHOTO_BASE_URL` points the site at it. Pages under `/erotic/` are `noindex`.
+Planned: Cloudflare Pages. Photos live on DigitalOcean Spaces (one bucket per site); `PUBLIC_PHOTO_BASE_URL` points the site at it. Details in `docs/GO-LIVE.md`. Pages under `/erotic/` are `noindex`.
 
 ## More
 

@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 161
-# selected: [1, 2, 3]
+selected: [9, 10, 2]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "Wind, sand and slow days by the sea."
 ---

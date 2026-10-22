@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 101
-# selected: [1, 2, 3]
+selected: [8, 3, 4]
 # hero: 1
 photos:
   - 01.jpg
@@ -19,5 +19,5 @@ photos:
   - 07.jpg
   - 08.jpg
   - 09.jpg
-# note: ""
+note: "Black lace, feathers and a leather sofa."
 ---

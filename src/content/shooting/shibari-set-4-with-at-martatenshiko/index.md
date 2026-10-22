@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 181
-# selected: [1, 2, 3]
+selected: [3, 7, 19]
 # hero: 1
 photos:
   - 01.jpg
@@ -31,5 +31,5 @@ photos:
   - 19.jpg
   - 20.jpg
   - 21.jpg
-# note: ""
+note: "Red hair, a floral kimono and a low table."
 ---

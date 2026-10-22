@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 153
-# selected: [1, 2, 3]
+selected: [19, 1, 2]
 # hero: 1
 photos:
   - 01.jpg
@@ -31,5 +31,5 @@ photos:
   - 19.jpg
   - 20.jpg
   - 21.jpg
-# note: ""
+note: "Concrete and domes in a flat grey light."
 ---

@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 169
-# selected: [1, 2, 3]
+selected: [2, 4, 12]
 # hero: 1
 photos:
   - 01.jpg
@@ -24,5 +24,5 @@ photos:
   - 12.jpg
   - 13.jpg
   - 14.jpg
-# note: ""
+note: "Red cloth, jute rope, one pool of warm light."
 ---

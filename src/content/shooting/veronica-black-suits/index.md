@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 127
-# selected: [1, 2, 3]
+selected: [1, 7, 3]
 # hero: 1
 photos:
   - 01.jpg
@@ -17,5 +17,5 @@ photos:
   - 05.jpg
   - 06.jpg
   - 07.jpg
-# note: ""
+note: "Crouched in black lace on a grey backdrop."
 ---

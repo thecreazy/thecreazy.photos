@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 117
-# selected: [1, 2, 3]
+selected: [1, 4, 7]
 # hero: 1
 photos:
   - 01.jpg
@@ -17,5 +17,5 @@ photos:
   - 05.jpg
   - 06.jpg
   - 07.jpg
-# note: ""
+note: "Backstage: a lit mirror and black lace."
 ---

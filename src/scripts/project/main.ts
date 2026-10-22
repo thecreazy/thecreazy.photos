@@ -1,4 +1,4 @@
-import { clamp, lerp, smooth } from '../../lib/rng';
+import { clamp, hashStr, lerp, smooth } from '../../lib/rng';
 import { makeTextures } from './textures';
 import { sleeveSheet } from './sleeve';
 
@@ -154,6 +154,8 @@ function negatives() {
   if (!sec || !host) return;
   const film: string[] = JSON.parse(sec.dataset.film!);
   const bw = sec.dataset.bw === 'true';
+  const selected: number[] = JSON.parse(sec.dataset.selected ?? '[]');
+  const seed = hashStr(sec.dataset.slug ?? '');
   const io = new IntersectionObserver((es) => {
     if (!es[0].isIntersecting) return;
     io.disconnect();
@@ -164,7 +166,7 @@ function negatives() {
       im.src = src;
     }))).then((imgs) => {
       if (!imgs.some(Boolean)) return;
-      host.replaceChildren(sleeveSheet({ n: film.length, bw, imgs }, false), sleeveSheet({ n: film.length, bw, imgs }, true));
+      host.replaceChildren(sleeveSheet({ n: film.length, bw, imgs, selected, seed }, false), sleeveSheet({ n: film.length, bw, imgs, selected, seed }, true));
     });
   }, { rootMargin: '600px' });
   io.observe(sec);

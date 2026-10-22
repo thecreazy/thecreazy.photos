@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 180
-# selected: [1, 2, 3]
+selected: [6, 5, 7]
 # hero: 1
 photos:
   - 01.jpg
@@ -20,5 +20,5 @@ photos:
   - 08.jpg
   - 09.jpg
   - 10.jpg
-# note: ""
+note: "Red light, a glowing mask, a quiet sofa."
 ---

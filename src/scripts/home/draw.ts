@@ -1,6 +1,6 @@
 // 2D painting of a film segment: the positive picture (the shader inverts it into a negative)
 // plus a "marks" layer for grease pencil and marker that must not invert. Ported from the prototype.
-import { FH, FW, INK, MARK, MM, PEN, PITCH, STRIP_H, WAX } from './constants';
+import { FH, FW, INK, MARK, MM, PEN, PITCH, STRIP_H, TAU, WAX } from './constants';
 import type { Seg } from './types';
 
 export const cvs = (w: number, h: number) => Object.assign(document.createElement('canvas'), { width: Math.round(w), height: Math.round(h) });
@@ -24,6 +24,35 @@ function wax(ctx: CanvasRenderingContext2D, color: string) {
     waxCache[color] = c;
   }
   return ctx.createPattern(waxCache[color], 'repeat')!;
+}
+
+/** Hand-drawn ellipse as a point list (slightly open, wobbly), for circling picks in grease pencil. */
+export function ellipsePts(cx: number, cy: number, rx: number, ry: number, r: () => number): [number, number][] {
+  const pts: [number, number][] = [], a0 = r() * TAU, sw = TAU + 0.3 + r() * 0.45, ph = r() * 9, n = 72;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, a = a0 + sw * t, k = 1 + 0.035 * Math.sin(a * 2 + ph) + 0.05 * (t - 0.5);
+    pts.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+  }
+  return pts;
+}
+/** A slightly bowed line between two points, as drawn freehand. */
+export function bowPts(x0: number, y0: number, x1: number, y1: number, r: () => number, bow = 4): [number, number][] {
+  const pts: [number, number][] = [], n = 16, nx = -(y1 - y0), ny = x1 - x0, L = Math.hypot(nx, ny) || 1, b = (r() - 0.5) * bow;
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, c = 4 * t * (1 - t) * b;
+    pts.push([x0 + (x1 - x0) * t + (nx / L) * c, y0 + (y1 - y0) * t + (ny / L) * c]);
+  }
+  return pts;
+}
+/** Grease-pencil stroke: a strong line plus a fainter offset one. */
+export function waxLine(x: CanvasRenderingContext2D, pts: [number, number][], color: string, w: number) {
+  x.save(); x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = wax(x, color);
+  for (const [off, lw, a] of [[0, w, 0.9], [w * 0.25, w * 0.55, 0.45]]) {
+    x.lineWidth = lw; x.globalAlpha = a; x.beginPath();
+    pts.forEach((p, i) => (i ? x.lineTo(p[0] + off, p[1] - off) : x.moveTo(p[0] + off, p[1] - off)));
+    x.stroke();
+  }
+  x.restore();
 }
 
 function hand(x: CanvasRenderingContext2D, t: string, px: number, py: number, size: number, font: string, rot = 0, color = INK, waxy = false) {

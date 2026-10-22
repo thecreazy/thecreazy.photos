@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 164
-# selected: [1, 2, 3]
+selected: [4, 12, 15]
 # hero: 1
 photos:
   - 01.jpg
@@ -27,5 +27,5 @@ photos:
   - 15.jpg
   - 16.jpg
   - 17.jpg
-# note: ""
+note: "Brick, a leather sofa, held very still."
 ---

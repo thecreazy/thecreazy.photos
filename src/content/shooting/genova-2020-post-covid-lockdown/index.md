@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 163
-# selected: [1, 2, 3]
+selected: [1, 5, 7]
 # hero: 1
 photos:
   - 01.jpg
@@ -17,5 +17,5 @@ photos:
   - 05.jpg
   - 06.jpg
   - 07.jpg
-# note: ""
+note: "Narrow streets and sea light after lockdown."
 ---

@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 151
-# selected: [1, 2, 3]
+selected: [3, 24, 9]
 # hero: 1
 photos:
   - 01.jpg
@@ -41,5 +41,5 @@ photos:
   - 29.jpg
   - 30.jpg
   - 31.jpg
-# note: ""
+note: "Quiet corners and strangers at crossings."
 ---

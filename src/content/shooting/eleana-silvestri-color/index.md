@@ -7,11 +7,11 @@ section: models
 # bw:
 home: true
 order: 106
-# selected: [1, 2, 3]
+selected: [2, 1, 3]
 # hero: 1
 photos:
   - 01.jpg
   - 02.jpg
   - 03.jpg
-# note: ""
+note: "White bob, black corset, a wire fence."
 ---

@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 137
-# selected: [1, 2, 3]
+selected: [4, 3, 5]
 # hero: 1
 photos:
   - 01.jpg
@@ -15,5 +15,5 @@ photos:
   - 03.jpg
   - 04.jpg
   - 05.jpg
-# note: ""
+note: "Dark bathroom, red hair, a gilded mirror."
 ---

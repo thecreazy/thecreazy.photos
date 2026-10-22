@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 118
-# selected: [1, 2, 3]
+selected: [11, 8, 4]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "Pearls and a white brick wall, in soft grey."
 ---

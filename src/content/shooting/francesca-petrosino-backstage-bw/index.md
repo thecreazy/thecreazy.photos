@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 116
-# selected: [1, 2, 3]
+selected: [4, 2, 9]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "A dressing room, bulbs, boots, soft grain."
 ---

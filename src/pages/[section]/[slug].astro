@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Envelope from '../../components/Envelope.astro';
 import PrintFigure from '../../components/PrintFigure.astro';
 import '../../styles/project.css';
-import { getShootings, photoUrl } from '../../lib/shooting';
+import { filmUrl, getShootings, photoUrl } from '../../lib/shooting';
 import { t } from '../../i18n/en';
 
 export const getStaticPaths = (async () => {
@@ -58,7 +58,8 @@ for (let i = 0, p = 0; i < others.length; p++) {
   <noscript><div class="print-hero-static"><PrintFigure shooting={s} index={heroIdx} eager /></div></noscript>
 
   <section class="b-neg" id="negatives" data-slug={s.slug} data-bw={String(!!s.bw)}
-    data-film={JSON.stringify(s.photos.map((f) => photoUrl(s.slug, f, 'film', 'webp')))}>
+    data-selected={JSON.stringify(s.selected.map((i) => i - 1))}
+    data-film={JSON.stringify(s.photos.map((f) => filmUrl(s.slug, f)))}>
     <div class="b-label"><span>{t.project.negatives}</span><small>{t.project.negativesHint}</small></div>
     <div class="sleeve" id="sleeve"></div>
   </section>

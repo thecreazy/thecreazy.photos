@@ -15,6 +15,7 @@ export interface RollData {
   n: number;
   shown: number[]; // 0-based indices of the frames on the roll (the `selected` ones)
   film: string[]; // 700px urls, same order as `shown`
+  large: string[]; // 1400px urls for the darkroom print, same order
   port: boolean[]; // portrait flag, same order as `shown`
 }
 export interface HomeData { rolls: RollData[]; labels: Record<string, string> }

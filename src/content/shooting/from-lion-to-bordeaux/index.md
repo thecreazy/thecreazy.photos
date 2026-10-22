@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 157
-# selected: [1, 2, 3]
+selected: [5, 9, 4]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "Stone villages and soft evening light."
 ---

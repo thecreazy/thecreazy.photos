@@ -8,7 +8,8 @@ import { buildNav, buildTimeline, layoutHUD, updateHUD } from './hud';
 import { minX, nearestStop } from './motion';
 import { S } from './state';
 import { cvs } from './draw';
-import type { HomeData } from './types';
+import { developPrint, resetDarkroom } from './darkroom/darkroom';
+import type { HomeData, Roll } from './types';
 
 const $ = (id: string) => document.getElementById(id)!;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -70,11 +71,20 @@ async function main() {
     fade.classList.add('on');
     setTimeout(() => (location.href = href), 260);
   };
-  addEventListener('pageshow', (e) => { if (e.persisted) { S.busy = false; fade.classList.remove('on'); } }); // back button (bfcache)
+  /** Frame in the light → darkroom → project page. No WebGL / reduced motion / frame not loaded: plain fade. */
+  const develop = async (roll: Roll, fi: number) => {
+    if (S.busy) return;
+    if (reduced) { open(roll.href); return; }
+    S.busy = true;
+    const ok = await developPrint(roll, fi);
+    if (ok) location.href = roll.href; // the darkroom overlay stays up; the cross-document view transition fades it into the page
+    else { S.busy = false; open(roll.href); }
+  };
+  addEventListener('pageshow', (e) => { if (e.persisted) { S.busy = false; fade.classList.remove('on'); resetDarkroom(); } }); // back button (bfcache)
   initInput(canvas, {
     open: (roll, fi) => {
       try { sessionStorage.setItem('rc.pick', `${roll.slug}:${fi + 1}`); } catch { /* ignore */ }
-      open(roll.href);
+      void develop(roll, fi);
     },
     contact: () => open('/contact/'),
   });

@@ -1,7 +1,7 @@
 ---
 import '../styles/home.css';
 import Base from '../layouts/Base.astro';
-import { getShootings, photoUrl } from '../lib/shooting';
+import { filmUrl, getShootings, photoUrl } from '../lib/shooting';
 import { SECTIONS } from '../content.config';
 import { HOME_LIMIT } from '../config';
 import { t } from '../i18n/en';
@@ -19,7 +19,8 @@ const data: HomeData = {
     return {
       slug: s.slug, href: `/${s.section}/${s.slug}/`, section: s.section, name: s.name, title: s.title, date: s.date,
       stock: s.stockLabel, bw: !!s.bw, n: s.photos.length, shown,
-      film: shown.map((i) => photoUrl(s.slug, s.photos[i], 'film', 'webp')),
+      film: shown.map((i) => filmUrl(s.slug, s.photos[i])),
+      large: shown.map((i) => photoUrl(s.slug, s.photos[i], 1400, 'webp')),
       port: shown.map((i) => !!s.meta[s.photos[i]]?.portrait),
     };
   }),
@@ -36,6 +37,11 @@ const data: HomeData = {
   <div id="meta"></div>
   <div id="timeline"><span id="tlMark"></span></div>
   <div id="hint">{t.home.hint}</div>
+  <div id="darkroom" aria-hidden="true">
+    <canvas id="drgl"></canvas>
+    <svg id="dial" viewBox="0 0 100 100"></svg>
+    <div id="drCap">{t.home.developing}</div>
+  </div>
   <div id="loader"><div>{t.home.loading}</div><div id="bar"><i></i></div></div>
 
   <main class="roll-list">

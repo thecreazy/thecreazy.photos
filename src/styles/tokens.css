@@ -19,3 +19,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--light); font: 13px/1.45 var(--mono); }
 a { color: inherit; }
+
+/* cross-document fade between the darkroom's last frame and the project page */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }

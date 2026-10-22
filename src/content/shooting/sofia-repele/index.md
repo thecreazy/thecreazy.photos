@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 172
-# selected: [1, 2, 3]
+selected: [2, 5, 1]
 # hero: 1
 photos:
   - 01.jpg
@@ -18,5 +18,5 @@ photos:
   - 06.jpg
   - 07.jpg
   - 08.jpg
-# note: ""
+note: "Concrete stairs and a cold window light."
 ---

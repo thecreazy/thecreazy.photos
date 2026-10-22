@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 144
-# selected: [1, 2, 3]
+selected: [8, 2, 4]
 # hero: 1
 photos:
   - 01.jpg
@@ -18,5 +18,5 @@ photos:
   - 06.jpg
   - 07.jpg
   - 08.jpg
-# note: ""
+note: "A corset seen twice, in the mirror."
 ---

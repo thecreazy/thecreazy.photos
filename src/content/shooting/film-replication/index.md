@@ -7,7 +7,7 @@ section: projects
 # bw:
 home: true
 order: 150
-# selected: [1, 2, 3]
+selected: [2, 7, 13]
 # hero: 1
 photos:
   - 01.jpg
@@ -26,5 +26,5 @@ photos:
   - 14.jpg
   - 15.jpg
   - 16.jpg
-# note: ""
+note: "Friends at home, each scene shot again."
 ---

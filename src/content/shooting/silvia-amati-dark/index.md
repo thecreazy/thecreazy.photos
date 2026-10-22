@@ -7,12 +7,12 @@ section: models
 # bw:
 home: true
 order: 135
-# selected: [1, 2, 3]
+selected: [4, 3, 2]
 # hero: 1
 photos:
   - 01.jpg
   - 02.jpg
   - 03.jpg
   - 04.jpg
-# note: ""
+note: "Dark teal, black latex, a zebra chair."
 ---

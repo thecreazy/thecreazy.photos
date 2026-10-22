@@ -1,5 +1,9 @@
 // "I negativi": archival sheet with every frame as a 35 mm negative (orange/grey mask); hover = positive.
 // Ported from sleeveSheet() in the prototype — geometry and colours unchanged.
+import { rng } from '../../lib/rng';
+import { RED } from '../home/constants';
+import { bowPts, ellipsePts, waxLine } from '../home/draw';
+
 const TAU = Math.PI * 2;
 const STRIP_H = 35, PITCH = 38, FW = 36, FH = 24, STRIP_W = 232;
 const cvs = (w: number, h: number) => Object.assign(document.createElement('canvas'), { width: Math.round(w), height: Math.round(h) });
@@ -9,9 +13,38 @@ function coverDraw(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: numb
   ctx.drawImage(img, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih);
 }
 
-export interface SleeveInput { n: number; bw: boolean; imgs: (HTMLImageElement | null)[] }
+export interface SleeveInput { n: number; bw: boolean; imgs: (HTMLImageElement | null)[]; selected: number[]; seed: number }
 
-export function sleeveSheet({ n: total, bw, imgs }: SleeveInput, pos: boolean) {
+type Mark = 'circle' | 'box' | 'underline' | 'tick';
+const MARKS: Mark[] = ['circle', 'box', 'underline', 'tick'];
+
+/** Circles one picked frame in grease pencil. (x, y, w, h) is the frame in canvas px, s the px per mm. */
+function mark(x: CanvasRenderingContext2D, kind: Mark, fx: number, fy: number, w: number, h: number, s: number, r: () => number) {
+  const line = (pts: [number, number][], lw = 1.15) => waxLine(x, pts, RED, lw * s), j = () => (r() - 0.5) * 1.4 * s;
+  if (kind === 'circle') line(ellipsePts(fx + w / 2, fy + h / 2, w / 2 + 3 * s, h / 2 + 3.4 * s, r));
+  else if (kind === 'box') {
+    const m = 2.2 * s, l = fx - m, t = fy - m, rr = fx + w + m, b = fy + h + m;
+    const c: [number, number][] = [[l + j(), t + j()], [rr + j(), t + j()], [rr + j(), b + j()], [l + j(), b + j()]];
+    const over = 0.07; // the last stroke overshoots the starting corner
+    const pts: [number, number][] = [];
+    for (let k = 0; k < 4; k++) {
+      const a = c[k], e = k === 3 ? [c[0][0] + (c[1][0] - c[0][0]) * over, c[0][1] + (c[1][1] - c[0][1]) * over] : c[k + 1];
+      pts.push(...bowPts(a[0], a[1], e[0], e[1], r, 2.4 * s));
+    }
+    line(pts);
+  } else if (kind === 'underline') {
+    const y = fy + h + 2.6 * s;
+    line(bowPts(fx - 1.5 * s, y, fx + w + 1.5 * s, y + (r() - 0.5) * s, r, 1.6 * s), 1.1);
+    line(bowPts(fx + 1 * s, y + 2.1 * s, fx + w - 1.5 * s, y + 2.1 * s + (r() - 0.5) * s, r, 1.6 * s), 1.1);
+  } else {
+    // a big check mark overlapping the frame
+    const p0: [number, number] = [fx + w * 0.2, fy + h * 0.55], p1: [number, number] = [fx + w * 0.4, fy + h * 0.95], p2: [number, number] = [fx + w * 0.92, fy - h * 0.05];
+    line([...bowPts(p0[0], p0[1], p1[0], p1[1], r, s), ...bowPts(p1[0], p1[1], p2[0], p2[1], r, 1.6 * s)], 1.5);
+  }
+}
+
+export function sleeveSheet({ n: total, bw, imgs, selected, seed }: SleeveInput, pos: boolean) {
+  const picks = new Map([...selected].sort((a, b) => a - b).map((i, k) => [i, MARKS[(seed + k) % MARKS.length]] as const));
   const S = 5, per = 6, rows = Math.ceil(total / per), PH = 44, MX = 22, MY = 14;
   const w = (STRIP_W + MX * 2) * S, h = (rows * PH + MY * 2) * S;
   const c = cvs(w, h), x = c.getContext('2d')!;
@@ -63,6 +96,8 @@ export function sleeveSheet({ n: total, bw, imgs }: SleeveInput, pos: boolean) {
         tx.putImageData(d, 0, 0);
       }
       x.drawImage(t, fx, fy);
+      // the picks (the frames on the home roll) are circled in red grease pencil, which doesn't invert
+      if (picks.has(i)) mark(x, picks.get(i)!, fx, fy, FW * S, FH * S, S, rng(i * 17 + 3));
     }
     g = x.createLinearGradient(0, y0, 0, y0 + PH * S);
     g.addColorStop(0, 'rgba(255,255,255,.16)'); g.addColorStop(0.25, 'rgba(255,255,255,0)'); g.addColorStop(0.9, 'rgba(255,255,255,.05)');

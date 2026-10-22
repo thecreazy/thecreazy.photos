@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 148
-# selected: [1, 2, 3]
+selected: [33, 9, 17]
 # hero: 1
 photos:
   - 01.jpg
@@ -45,5 +45,5 @@ photos:
   - 33.jpg
   - 34.jpg
   - 35.jpg
-# note: ""
+note: "Salt, sun and a yellow lounger by the sea."
 ---

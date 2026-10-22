@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 110
-# selected: [1, 2, 3]
+selected: [1, 7, 10]
 # hero: 1
 photos:
   - 01.jpg
@@ -20,5 +20,5 @@ photos:
   - 08.jpg
   - 09.jpg
   - 10.jpg
-# note: ""
+note: "A knit top, a half smile, hands in hair."
 ---

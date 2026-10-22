@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 184
-# selected: [1, 2, 3]
+selected: [4, 20, 19]
 # hero: 1
 photos:
   - 01.jpg
@@ -32,5 +32,5 @@ photos:
   - 20.jpg
   - 21.jpg
   - 22.jpg
-# note: ""
+note: "Rope in the dark, one soft light on tatami."
 ---

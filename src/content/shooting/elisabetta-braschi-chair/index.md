@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 132
-# selected: [1, 2, 3]
+selected: [3, 1, 11]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "Warm light and a low angle, looking up."
 ---

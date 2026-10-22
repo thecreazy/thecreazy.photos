@@ -13,7 +13,8 @@ The full spec is `docs/SPEC.md`. Read it before each phase.
   component loaded on the home page only.
 - Project pages = **real static HTML** (SEO, shareable URLs), effects as progressive JS.
 - Content in Astro Content Collections with a zod schema.
-- Images: `sharp` pipeline (`pnpm foto`), variants in `public/photos/` (gitignored), base URL in `PUBLIC_PHOTO_BASE_URL`; external storage (R2) to be decided at deploy time.
+- Images: `sharp` pipeline (`pnpm foto`), variants in `public/photos/` (gitignored), base URL in `PUBLIC_PHOTO_BASE_URL`; external storage: DigitalOcean Spaces (one bucket per site, see `docs/GO-LIVE.md`).
+- The 700 px "film" frames (home roll, negatives sheet, darkroom fallback) are served from the site itself (`public/film/`, committed): their pixels are read on a canvas, which would need CORS on the bucket (not applied by DigitalOcean Spaces so far). Large variants (`public/photos/`) stay on the bucket.
 - Hosting: Cloudflare Pages (to be confirmed).
 
 ## Rules
@@ -36,6 +37,6 @@ print notebook · scotch-tape tabs for previous/next project · blotchy beige ba
 - [ ] Phase 1 — skeleton, content schema, photo pipeline, migration (in progress: Astro + schema + `foto` + `migrate` written; still missing a test with real photos and a test deploy)
 - [ ] Phase 2 — project page (envelope): done and checked in the browser (envelope, negatives, prints, next envelope, Archive, Contact); missing real photos, mobile check (Phase 5) and Contact details
 - [ ] Phase 3 — home roll: done and checked in the browser with synthetic photos (roll, light, return from the project page, list fallback); 18+ gate removed (user decision); the clicked frame becomes the hero print via sessionStorage `rc.pick`; missing real photos, mobile (Phase 5), click → darkroom (Phase 4; for now it goes straight to the page)
-- [ ] Phase 4 — darkroom + transition
+- [ ] Phase 4 — darkroom + transition: done and checked in the browser with real photos (`src/scripts/home/darkroom/`: verbatim `DR_FS` shader, `DR_T` timings, hand timer; click/key skips to the light; 2nd time in a session plays 1.8× faster; reduced motion / no WebGL → plain fade; the large 1400px print needs bucket CORS, otherwise the 700px frame is kept; cross-document view transition fades into the page); to check: real GPU / phone performance
 - [ ] Phase 5 — mobile
 - [ ] Phase 6 — performance, fallbacks, going live

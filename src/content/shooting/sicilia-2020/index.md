@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 160
-# selected: [1, 2, 3]
+selected: [26, 1, 33]
 # hero: 1
 photos:
   - 01.jpg
@@ -55,5 +55,5 @@ photos:
   - 43.jpg
   - 44.jpg
   - 45.jpg
-# note: ""
+note: "Streets, temples and long hot afternoons."
 ---

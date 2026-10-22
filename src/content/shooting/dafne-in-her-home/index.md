@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 166
-# selected: [1, 2, 3]
+selected: [4, 8, 14]
 # hero: 1
 photos:
   - 01.jpg
@@ -25,5 +25,5 @@ photos:
   - 13.jpg
   - 14.jpg
   - 15.jpg
-# note: ""
+note: "A leather sofa, plants and window light."
 ---

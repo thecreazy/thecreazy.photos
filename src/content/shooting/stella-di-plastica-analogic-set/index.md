@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 174
-# selected: [1, 2, 3]
+selected: [3, 2, 1]
 # hero: 1
 photos:
   - 01.jpg
@@ -21,5 +21,5 @@ photos:
   - 09.jpg
   - 10.jpg
   - 11.jpg
-# note: ""
+note: "Pointe shoes at a window, in faded colors."
 ---

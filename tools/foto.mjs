@@ -6,7 +6,9 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 import { encode } from 'blurhash';
 
-const MASTERS = 'masters', OUT = 'public/photos', DATA = 'src/data/photos';
+const MASTERS = 'masters', OUT = 'public/photos', FILM_OUT = 'public/film', DATA = 'src/data/photos';
+// The 700px "film" frames live in public/film (committed, served from the site's own origin: the home roll and the
+// negatives sheet read their pixels, which would need CORS on external storage). Everything else goes to public/photos.
 const WIDTHS = [800, 1400, 2200], FILM = 700;
 const BW_THRESHOLD = 0.05; // same as isBW() in the prototype: mean (max-min)/255 over a 24×24 thumb
 
@@ -31,19 +33,21 @@ for (const slug of slugs) {
   const dataPath = join(DATA, `${slug}.json`);
   const prev = existsSync(dataPath) ? JSON.parse(await readFile(dataPath, 'utf8')).photos : {};
   const outDir = join(OUT, slug);
-  await mkdir(outDir, { recursive: true }); await mkdir(DATA, { recursive: true });
+  const filmDir = join(FILM_OUT, slug);
+  await mkdir(outDir, { recursive: true }); await mkdir(filmDir, { recursive: true }); await mkdir(DATA, { recursive: true });
+  const outPath = (base, n, e) => join(n === 'film' ? filmDir : outDir, `${base}-${n}.${e}`);
   const photos = {};
   for (const f of files) {
     const buf = await readFile(join(dir, f));
     const hash = createHash('sha1').update(buf).digest('hex').slice(0, 12);
     const base = f.replace(/\.[^.]+$/, '');
     const wanted = [...WIDTHS.flatMap((w) => [[w, 'avif'], [w, 'webp']]), [FILM, 'webp']].map(([w, e]) => [w === FILM ? 'film' : w, w, e]);
-    if (prev[f]?.hash === hash && wanted.every(([n, , e]) => existsSync(join(outDir, `${base}-${n}.${e}`)))) { photos[f] = prev[f]; continue; }
+    if (prev[f]?.hash === hash && wanted.every(([n, , e]) => existsSync(outPath(base, n, e)))) { photos[f] = prev[f]; continue; }
     const img = sharp(buf).rotate();
     const { width, height } = await img.metadata().then(async (m) => (m.orientation >= 5 ? { width: m.height, height: m.width } : { width: m.width, height: m.height }));
     for (const [n, w, e] of wanted) {
       const p = img.clone().resize({ width: w, withoutEnlargement: true });
-      await (e === 'avif' ? p.avif({ quality: 55, effort: 4 }) : p.webp({ quality: 80 })).toFile(join(outDir, `${base}-${n}.${e}`));
+      await (e === 'avif' ? p.avif({ quality: 55, effort: 4 }) : p.webp({ quality: 80 })).toFile(outPath(base, n, e));
     }
     photos[f] = { w: width, h: height, portrait: height > width * 1.05, hash, ...(await analyse(buf)) };
     console.log(`${slug}/${f}`);

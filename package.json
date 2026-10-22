@@ -11,6 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "foto": "tsx tools/foto.mjs",
+    "masters": "tsx tools/fetch-masters.mjs",
+    "upload": "rclone copy public/photos canellariccardo:photos-riccardo --s3-acl public-read --s3-no-check-bucket --progress",
     "migrate": "tsx tools/migrate.mjs"
   },
   "dependencies": {

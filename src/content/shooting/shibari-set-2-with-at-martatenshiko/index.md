@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 183
-# selected: [1, 2, 3]
+selected: [2, 9, 23]
 # hero: 1
 photos:
   - 01.jpg
@@ -36,5 +36,5 @@ photos:
   - 24.jpg
   - 25.jpg
   - 26.jpg
-# note: ""
+note: "Kimono and rope, barely lit, almost black."
 ---

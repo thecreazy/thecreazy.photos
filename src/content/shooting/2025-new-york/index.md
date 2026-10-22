@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 152
-# selected: [1, 2, 3]
+selected: [25, 14, 38]
 # hero: 1
 photos:
   - 01.jpg
@@ -56,5 +56,5 @@ photos:
   - 44.jpg
   - 45.jpg
   - 46.jpg
-# note: ""
+note: "The city on foot, one crowd at a time."
 ---

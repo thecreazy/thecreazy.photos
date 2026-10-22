@@ -1,0 +1,60 @@
+{
+  "photos": {
+    "01.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "719577811e61",
+      "bw": false,
+      "blurhash": "LaN,0gWA?u~VW-ofniWVNFt7M{M|"
+    },
+    "02.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "e51124e994bd",
+      "bw": false,
+      "blurhash": "LgL:$At7~p-oxts:M{R*t6WBE2oL"
+    },
+    "03.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "e63054bf4391",
+      "bw": false,
+      "blurhash": "LiL:u_-:~psAtQoKRjWqs.RjIVs:"
+    },
+    "04.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "30b3f25ba772",
+      "bw": false,
+      "blurhash": "LcM%7Z%f~pwct6oLRjW;W.aKIoaf"
+    },
+    "05.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "4e3e72065704",
+      "bw": false,
+      "blurhash": "LgMGR~tQ~p-oxuoeM{R+WUoKIoWB"
+    },
+    "06.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "199714a9ec2b",
+      "bw": false,
+      "blurhash": "LYNJOE-:~prrkUoLRQSgS1adE2f+"
+    },
+    "07.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "0262271b2b25",
+      "bw": false,
+      "blurhash": "LcMGR~of~p?Gx[s.M{S2W.t6IoRk"
+    }
+  }
+}

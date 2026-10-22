@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 182
-# selected: [1, 2, 3]
+selected: [4, 11, 16]
 # hero: 1
 photos:
   - 01.jpg
@@ -26,5 +26,5 @@ photos:
   - 14.jpg
   - 15.jpg
   - 16.jpg
-# note: ""
+note: "Rope on tatami, almost no light at all."
 ---

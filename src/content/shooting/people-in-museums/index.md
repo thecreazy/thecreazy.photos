@@ -7,7 +7,7 @@ section: projects
 # bw:
 home: true
 order: 149
-# selected: [1, 2, 3]
+selected: [18, 10, 20]
 # hero: 1
 photos:
   - 01.jpg
@@ -35,5 +35,5 @@ photos:
   - 23.jpg
   - 24.jpg
   - 25.jpg
-# note: ""
+note: "Visitors as shadows in the gallery light."
 ---

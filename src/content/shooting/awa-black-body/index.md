@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 133
-# selected: [1, 2, 3]
+selected: [13, 22, 7]
 # hero: 1
 photos:
   - 01.jpg
@@ -34,5 +34,5 @@ photos:
   - 22.jpg
   - 23.jpg
   - 24.jpg
-# note: ""
+note: "Mirrors, white sheets and golden light."
 ---

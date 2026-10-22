@@ -1,0 +1,28 @@
+{
+  "photos": {
+    "01.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "a8e35283d036",
+      "bw": true,
+      "blurhash": "LJIE|g-;?bRj~qRjRjM{?bWB9Fj["
+    },
+    "02.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "0f38b6c4d8bd",
+      "bw": true,
+      "blurhash": "LIDS:tt7IUM{~qM{D%M{WBWBIUM{"
+    },
+    "03.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "3a735f4352a7",
+      "bw": true,
+      "blurhash": "LTHV9wxu%MM{~qWBM{WBRjIUM{fQ"
+    }
+  }
+}

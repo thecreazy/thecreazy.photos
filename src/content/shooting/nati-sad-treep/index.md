@@ -7,7 +7,7 @@ section: models
 # bw:
 home: true
 order: 102
-# selected: [1, 2, 3]
+selected: [9, 2, 12]
 # hero: 1
 photos:
   - 01.jpg
@@ -22,5 +22,5 @@ photos:
   - 10.jpg
   - 11.jpg
   - 12.jpg
-# note: ""
+note: "Two against a white brick wall, heavy boots."
 ---

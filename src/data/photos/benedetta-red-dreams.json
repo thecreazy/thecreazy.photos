@@ -1,0 +1,52 @@
+{
+  "photos": {
+    "01.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "c41d826bb955",
+      "bw": false,
+      "blurhash": "LOID:S%2t,oJ_Mxt-:NGFyoLRkV@"
+    },
+    "02.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "4542fa355d4d",
+      "bw": false,
+      "blurhash": "LEGHuF^*_2={~VM{-:I;.mS$R.ni"
+    },
+    "03.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "6a838bf62d42",
+      "bw": false,
+      "blurhash": "LMIqS]?H?v-p~pM{xuIocZa~V[ay"
+    },
+    "04.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "d96f54d2793d",
+      "bw": false,
+      "blurhash": "LSIg+Ixt.8tl_MM{s:oeOZWXRPs:"
+    },
+    "05.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "f998e29f3854",
+      "bw": false,
+      "blurhash": "LOINpq-;?vx]_MM{ozn$TKRkV[oL"
+    },
+    "06.jpg": {
+      "w": 3840,
+      "h": 5760,
+      "portrait": true,
+      "hash": "b08a13bab805",
+      "bw": false,
+      "blurhash": "LYH-oXxZ%g%L~pRjxaR*TKWCRjoL"
+    }
+  }
+}

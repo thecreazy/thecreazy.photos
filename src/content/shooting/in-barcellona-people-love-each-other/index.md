@@ -7,7 +7,7 @@ section: travels
 # bw:
 home: true
 order: 156
-# selected: [1, 2, 3]
+selected: [3, 9, 6]
 # hero: 1
 photos:
   - 01.jpg
@@ -20,5 +20,5 @@ photos:
   - 08.jpg
   - 09.jpg
   - 10.jpg
-# note: ""
+note: "Sea, lunch tables and warm church light."
 ---

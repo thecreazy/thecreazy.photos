@@ -7,7 +7,7 @@ section: erotic
 # bw:
 home: true
 order: 167
-# selected: [1, 2, 3]
+selected: [3, 8, 5]
 # hero: 1
 photos:
   - 01.jpg
@@ -20,5 +20,5 @@ photos:
   - 08.jpg
   - 09.jpg
   - 10.jpg
-# note: ""
+note: "A clawfoot tub in black and white."
 ---
