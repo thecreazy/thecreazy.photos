@@ -72,6 +72,7 @@ How many shootings of a section appear on the home is set in `src/config.ts` (`H
 | Variable                | Default   | Purpose                                              |
 | :---------------------- | :-------- | :--------------------------------------------------- |
 | `PUBLIC_PHOTO_BASE_URL` | `/photos` | Where the photo variants are served from (e.g. Spaces) |
+| `SITE_URL`              | `https://photos.canellariccardo.it` | Public address: canonical URLs, sitemap, Open Graph |
 
 All site copy lives in `src/i18n/en.ts`. The Contact page hides any line left empty there (email, Instagram, place).
 

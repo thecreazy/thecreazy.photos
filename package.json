@@ -16,6 +16,7 @@
     "migrate": "tsx tools/migrate.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@fontsource/covered-by-your-grace": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/instrument-serif": "^5.3.0",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/three": "0.160.0",
     "cheerio": "^1.2.0",
+    "satori": "^0.63.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },

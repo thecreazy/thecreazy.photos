@@ -7,7 +7,7 @@ import { t } from '../i18n/en';
 
 const all = await getShootings();
 ---
-<Base title={t.archive.title} bodyClass="paper">
+<Base title={t.archive.title} description={t.meta.archive} bodyClass="paper">
   <div class="pg">
     <div class="pg-top"><a href="/">{t.project.back}</a><span>{t.archive.count(all.length)}</span></div>
     <h1>{t.archive.title}<em>{t.archive.sub}</em></h1>

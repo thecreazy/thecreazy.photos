@@ -37,7 +37,7 @@ for (let i = 0, p = 0; i < others.length; p++) {
   i += take;
 }
 ---
-<Base title={title} description={`${title} — ${t.sections[s.section]}, ${s.date}`} noindex={s.section === 'erotic'} bodyClass="project">
+<Base title={title} description={`${title} — ${t.sections[s.section]}, ${s.date}.${s.note ? ` ${s.note}` : ''}`} image={`/og/${s.slug}.jpg`} imageAlt={`${title} — ${t.sections[s.section]}`} bodyClass="project">
   <div class="b-bg"></div>
   <div class="pt">
     <a href={`/#${s.slug}`} data-back>{t.project.back}</a>

@@ -54,6 +54,15 @@ export const t = {
     alt: (name: string, i: number) => `${name}, frame ${i}`,
   },
   archive: { title: 'Archive', sub: 'every roll', count: (n: number) => `archive · ${n} shoots`, photos: (n: number) => `${n} photos` },
+  og: {
+    eyebrow: 'Film · darkroom',
+    tagline: 'A roll of film, one envelope for every shoot.',
+  },
+  meta: {
+    home: 'Photography by Riccardo Canella: portraits, projects and travels, as a roll of film and a lab envelope for every shoot.',
+    archive: 'Every roll: the full list of shoots by Riccardo Canella, by section.',
+    contact: 'Get in touch with Riccardo Canella for a portrait, a project or a coffee.',
+  },
   notFound: {
     code: '404',
     title: "This frame didn't come out",

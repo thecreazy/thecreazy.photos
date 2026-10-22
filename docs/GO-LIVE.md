@@ -19,10 +19,10 @@ Test run: production build + `astro preview`, headless Chrome, **synthetic photo
 | Clicked frame → hero | works (clicked frame 2 → envelope shows print 2) |
 | Home, no JS | HTML list of 87 shootings, visible |
 | Home, reduced motion | loads, no errors |
-| Shooting pages (models, B&W, travels, erotic) | images load, prints laid one by one, negatives sheet drawn, no horizontal scroll, Erotics has `noindex,nofollow` |
+| Shooting pages (models, B&W, travels, erotic) | images load, prints laid one by one, negatives sheet drawn, no horizontal scroll, Erotics is indexed like the rest |
 | Shooting page, no JS / reduced motion | hero print shown as a normal print / prints appear without the drop |
 | Archive, Contact | fine |
-| Mobile 390 px | no horizontal scroll, no errors; roll and envelope render, but **not designed for it yet** (Phase 5) |
+| Mobile 390 px | at the time of this first test: not designed yet (since done in Phase 5: vertical roll, darkroom turned) |
 
 **Problems found** (all in the list below):
 
@@ -116,7 +116,7 @@ Ordered by importance. Items marked ★ are blockers.
 1. ~~**Phase 4 — darkroom + transition.**~~ Done (shader and `DR_T` timings ported unchanged, shortened from the 2nd visit, skipped with reduced motion). Still to check on a real GPU and a phone.
 2. ★ **Phase 5 — mobile.** Portrait layout for the roll, the darkroom and the envelope; touch swipe; nav that doesn't wrap onto the brand.
 3. ★ **404 page** (`src/pages/404.astro`) in the site's style, with a link back to the roll.
-4. ★ **SEO basics**: `@astrojs/sitemap` (excluding `/erotic/`), `robots.txt`, `site` in `astro.config.mjs`,
+4. ~~★ **SEO basics**~~ **Done** (kept here for reference): `@astrojs/sitemap` (Erotics included), `robots.txt`, `site` in `astro.config.mjs`,
    canonical URLs, Open Graph / Twitter tags (title, description, image = the hero print variant), meta description on home/Archive/Contact,
    JSON-LD `Person`/`ImageObject` optional.
 5. ★ **Redirects** from the old Adobe URLs: turn `redirects.csv` into Cloudflare Pages `public/_redirects`
@@ -151,7 +151,7 @@ Ordered by importance. Items marked ★ are blockers.
 - [ ] Mobile (real phone), Safari, Firefox
 - [ ] Old URLs redirect (try 10 from `redirects.csv`)
 - [ ] `robots.txt`, `sitemap.xml`, 404 page, OG preview (paste a link in WhatsApp/Slack)
-- [ ] Erotics: `noindex`, not in the sitemap
+- [ ] Sitemap lists every shooting (Erotics included) and not the 404; OG preview of an Erotics page shows the blank frame (paste a link in WhatsApp/Slack)
 - [ ] Lighthouse: Performance ≥ 90 on the shooting page, ≥ 80 on home (desktop); no CLS
 
 ## 7. Switch day — [R]

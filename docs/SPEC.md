@@ -12,7 +12,7 @@ All site copy is in English and lives in `src/i18n/en.ts`.
 
 ### Sections
 `models` (Models) · `projects` (Projects) · `travels` (Travels) · `erotic` (Erotics) · plus Contact and Archive.
-There is no age gate on Erotics (decision: it is photography, not porn). The pages are still `noindex`.
+There is no age gate on Erotics (decision: it is photography, not porn) and the pages are indexed like the rest. Their social preview never shows the picture (see § 9).
 
 ### One shooting = one folder
 ```
@@ -131,4 +131,9 @@ Riccardo's own handwriting.** Grease-pencil red `#c4162a`, blue ink `#1d2a4a`, f
 3. **Home**: three.js roll as a component; HTML list fallback.
 4. **Darkroom** + transition to the page.
 5. **Mobile**.
-6. **Polish**: Lighthouse, reduced-motion, per-page meta/OG, sitemap, redirects, `noindex` Erotics, DNS.
+6. **Polish**: Lighthouse, reduced-motion, per-page meta/OG, sitemap, redirects, DNS.
+
+## 9. SEO and social previews
+- `site` is `https://photos.canellariccardo.it` (override with `SITE_URL`). Every page has a canonical URL, Open Graph and Twitter tags; `robots.txt` and the sitemap are generated at build time. Only the 404 page is `noindex` and left out of the sitemap.
+- One 1200×630 preview per shooting (`/og/<slug>.jpg`) plus a site-wide one (`/og/site.jpg`), generated at build time by `src/lib/og.ts` (satori + sharp) from the 700 px frames in `public/film`: the hero print with a white border on the dark background, section · date, name, title.
+- **Erotics never show the picture** in their preview: an undeveloped film frame stands in. The site-wide preview fans three frames chosen in `SITE_FRAMES` (`src/lib/og.ts`).
