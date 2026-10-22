@@ -16,7 +16,7 @@ The full spec is `docs/SPEC.md`. Read it before each phase.
 - Images: `sharp` pipeline (`pnpm foto`), variants in `public/photos/` (gitignored), base URL in `PUBLIC_PHOTO_BASE_URL`; external storage: DigitalOcean Spaces (one bucket per site, see `docs/GO-LIVE.md`).
 - The 700 px "film" frames (home roll, negatives sheet, darkroom fallback) are served from the site itself (`public/film/`, committed): their pixels are read on a canvas, which would need CORS on the bucket (not applied by DigitalOcean Spaces so far). Large variants (`public/photos/`) stay on the bucket.
 - SEO: `site` in `astro.config.mjs`, sitemap (`@astrojs/sitemap`), `robots.txt` endpoint, canonical + Open Graph/Twitter tags in `Base.astro`, OG images generated at build time (`src/lib/og.ts`, satori + sharp). Erotics are indexed like the rest (user decision) but their OG image never shows the picture.
-- Hosting: Cloudflare Pages (to be confirmed).
+- Hosting: **Vercel** (static build, no adapter; `vercel.json` holds redirects from the old Adobe URLs, `trailingSlash` and cache headers; Astro `trailingSlash: 'always'` to match).
 
 ## Rules
 - The prototype is the source of truth for the **look & feel**: port shaders, timings and proportions

@@ -53,9 +53,9 @@ Test run: production build + `astro preview`, headless Chrome, **synthetic photo
 
 ## 2. Accounts and domain — [R]
 
-1. **GitHub**: create a private repo, push the project (nothing to commit yet: `git init` is done, no commit).
-2. **Cloudflare** account for the site (Pages, free plan). The domain `canellariccardo.it` should have its DNS on Cloudflare
-   (or you add a CNAME at the current provider).
+1. **GitHub**: create a private repo and push the project (`git init` and the commits are already there, no remote yet).
+2. **Vercel** account for the site (hosting decided: Vercel). Heads-up: the free *Hobby* plan is for personal, **non-commercial** use;
+   a portfolio that offers paid work may need *Pro*. Check Vercel's current terms. DNS can stay wherever it is: you add the records Vercel shows.
 3. **DigitalOcean** account (needs a payment method). Photo hosting: see § 3.
 4. Site host name: `photos.canellariccardo.it`.
 
@@ -87,7 +87,7 @@ Spaces (region fra1, EU)
 2. Spaces → Access Keys → create a key **limited to this bucket** (read/write/delete). Save key + secret in a password manager.
 3. Bucket → Settings → **CORS** — **optional**: the roll, the negatives sheet and the darkroom fallback use same-origin frames
    (`public/film/`, committed to git), so the site works without it. CORS only makes the darkroom print sharp (it fetches the 1400 px
-   variant from the bucket). At the time of writing Spaces ignored the rule we configured. Allowed origins: `https://photos.canellariccardo.it`, the `*.pages.dev` preview URL, `http://localhost:4321`;
+   variant from the bucket). At the time of writing Spaces ignored the rule we configured. Allowed origins: `https://photos.canellariccardo.it`, the `*.vercel.app` preview URL, `http://localhost:4321`;
    methods `GET`, `HEAD`.
 4. Install [`rclone`](https://rclone.org/s3/#digitalocean-spaces) and create a remote `do` (provider `DigitalOcean`,
    endpoint `fra1.digitaloceanspaces.com`, the key from step 2).
@@ -119,29 +119,29 @@ Ordered by importance. Items marked ★ are blockers.
 4. ~~★ **SEO basics**~~ **Done** (kept here for reference): `@astrojs/sitemap` (Erotics included), `robots.txt`, `site` in `astro.config.mjs`,
    canonical URLs, Open Graph / Twitter tags (title, description, image = the hero print variant), meta description on home/Archive/Contact,
    JSON-LD `Person`/`ImageObject` optional.
-5. ★ **Redirects** from the old Adobe URLs: turn `redirects.csv` into Cloudflare Pages `public/_redirects`
-   (`/old-slug /models/new-slug 301`). Needed because the current domain already has indexed pages.
+5. ~~★ **Redirects**~~ **Done**: `pnpm redirects` writes the `redirects` list of `vercel.json` (85 shootings + the old section pages `/models`, `/projects`, `/work`, `/erotic` → Archive; 301, with and without trailing slash). Test on the `vercel.app` URL once deployed.
 6. **Favicon / social image**: replace the Astro default `favicon.svg`; make a 1200×630 `og.jpg`.
 7. **Performance pass** (Lighthouse on a real build with real photos): font preload/subset, image `sizes`, home initial JS weight
    (three.js ~600 KB min), memory on phones, a mobile-GPU check of the shaders.
 8. **Accessibility pass**: keyboard on the roll (← → Enter works; check focus on the HUD), `alt` text, contrast of HUD text, the lightbox focus trap.
 9. **Real-device checks**: Safari (macOS + iOS), Firefox, an Android phone. WebGL fallbacks were only tested by disabling JS.
-10. Nice to have: analytics (Cloudflare Web Analytics, no cookies), 18+ page-level notice if you ever change your mind about the gate.
+10. Nice to have: analytics (Vercel Web Analytics, or any cookie-less one), 18+ page-level notice if you ever change your mind about the gate.
 
 ## 5. Deploy the site — [R+C]
 
 1. Push the repo to GitHub.
-2. Cloudflare → Workers & Pages → Create → **Pages** → connect the repo.
-   - Build command: `pnpm build`
-   - Output directory: `dist`
-   - Environment variables: `NODE_VERSION=22`, `PUBLIC_PHOTO_BASE_URL=<Spaces CDN URL from § 3>`
-   - Pages detects pnpm from `packageManager`/lockfile. Make sure `pnpm-lock.yaml` is committed.
-3. Check the `*.pages.dev` preview URL (this is the **test deploy**: do the checklist in § 6 there).
-4. Add the custom domain `photos.canellariccardo.it` to the Pages project **only when ready to switch**.
+2. Vercel → Add New → **Project** → import the repo. The framework is detected as Astro (static, no adapter needed).
+   - Build command `pnpm build`, output `dist` (the defaults); Node.js 22.
+   - Environment variables: `PUBLIC_PHOTO_BASE_URL=<Spaces CDN URL from § 3>`; `SITE_URL=https://photos.canellariccardo.it`.
+   - `vercel.json` already holds the 89 redirects (old Adobe URLs, `trailingSlash`, cache headers for `/film` and `/og`).
+     Regenerate the redirects with `pnpm redirects` after editing `redirects.csv`.
+3. Check the `*.vercel.app` URL (this is the **test deploy**: do the checklist in § 6 there). Every push to a branch also gets a preview URL.
+   On the preview, `SITE_URL` keeps canonical/OG pointing at the final address: that's expected.
+4. Add the custom domain `photos.canellariccardo.it` to the Vercel project **only when ready to switch**.
    Until then the old Adobe site keeps that name, so you lose nothing.
 5. Keep the old site reachable for a while (Adobe plan) in case something needs to be compared.
 
-## 6. Pre-launch checklist (run on the `pages.dev` URL)
+## 6. Pre-launch checklist (run on the `vercel.app` URL)
 
 - [ ] Home loads, frames show real photos (CORS OK: no empty frames; check the browser console for CORS errors), no console errors
 - [ ] Every section on the roll, timeline jumps, ← → / wheel / drag feel right
@@ -157,7 +157,7 @@ Ordered by importance. Items marked ★ are blockers.
 ## 7. Switch day — [R]
 
 1. Lower the TTL of the current DNS record a day before.
-2. Pages project → Custom domains → add `photos.canellariccardo.it` (move the DNS record from Adobe to Cloudflare Pages).
+2. Vercel project → Settings → Domains → add `photos.canellariccardo.it`, then change the DNS record at the provider to what Vercel shows (CNAME to `cname.vercel-dns.com` or the A record it asks for).
 3. Re-run the checklist on the real domain, especially redirects and OG images.
 4. Submit the sitemap to Google Search Console; verify the new property.
 5. Update links elsewhere (Instagram bio, `canellariccardo.it`, email signature).
@@ -169,6 +169,6 @@ Ordered by importance. Items marked ★ are blockers.
 
 1. § 2 accounts + § 3 Spaces bucket (1 hour)
 2. § 1 first 5–10 shootings, `pnpm foto`, `rclone sync` (an evening)
-3. § 5 deploy to `pages.dev`
+3. § 5 deploy to `vercel.app`
 4. § 4 items 1–5 (Phases 4–5, 404, SEO, redirects) — this is where most of the remaining work is
 5. § 6 checklist → § 7 switch

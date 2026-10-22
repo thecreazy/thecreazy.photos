@@ -54,7 +54,7 @@ Real photos must come from Riccardo's **originals**, not from Adobe's CDN (to be
   - home film: 700 px (frame textures);
   - LQIP/blurhash for loading;
   - computes and saves: orientation, B&W yes/no (mean saturation < 0.05, like `isBW()`), dimensions.
-- Variants are uploaded to storage (Cloudflare R2 proposed); the site uses public URLs.
+- Variants are uploaded to storage (DigitalOcean Spaces); the site uses public URLs.
 - Masters **never** go in git.
 
 ---
@@ -120,7 +120,7 @@ Riccardo's own handwriting.** Grease-pencil red `#c4162a`, blue ink `#1d2a4a`, f
 
 ## 7. Open decisions
 - Where the originals live (Lightroom? folders?) → defines the import script.
-- Hosting/storage: Cloudflare Pages + R2? (align with where canellariccardo.it lives)
+- Hosting: Vercel; photo storage: DigitalOcean Spaces (decided).
 - Mobile: horizontal film and tray need rethinking in portrait (Phase 5).
 - Shortened darkroom from the second time?
 - Copy: two lines per shooting yes/no.

@@ -1,0 +1,471 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": true,
+  "headers": [
+    {
+      "source": "/film/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/og/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/sad-treep-let-them-look",
+      "destination": "/models/sad-treep-let-them-look/",
+      "permanent": true
+    },
+    {
+      "source": "/nati-black-and-white",
+      "destination": "/models/nati-black-and-white/",
+      "permanent": true
+    },
+    {
+      "source": "/nati-sad-treep",
+      "destination": "/models/nati-sad-treep/",
+      "permanent": true
+    },
+    {
+      "source": "/iris-leather",
+      "destination": "/models/iris-leather/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-body-nero",
+      "destination": "/models/veronica-body-nero/",
+      "permanent": true
+    },
+    {
+      "source": "/iris",
+      "destination": "/models/iris/",
+      "permanent": true
+    },
+    {
+      "source": "/eleana-silvestri-color",
+      "destination": "/models/eleana-silvestri-color/",
+      "permanent": true
+    },
+    {
+      "source": "/stella-di-plastica-stairs",
+      "destination": "/models/stella-di-plastica-stairs/",
+      "permanent": true
+    },
+    {
+      "source": "/francesca-petrosino-bw",
+      "destination": "/models/francesca-petrosino-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/nicole-backstage",
+      "destination": "/models/nicole-backstage/",
+      "permanent": true
+    },
+    {
+      "source": "/nati-the-quiet-bite",
+      "destination": "/models/nati-the-quiet-bite/",
+      "permanent": true
+    },
+    {
+      "source": "/stella-di-plastica-colors",
+      "destination": "/models/stella-di-plastica-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/francesca-petrosino-long-exposition",
+      "destination": "/models/francesca-petrosino-long-exposition/",
+      "permanent": true
+    },
+    {
+      "source": "/alice-bw",
+      "destination": "/models/alice-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/stella-di-plastica-dance",
+      "destination": "/models/stella-di-plastica-dance/",
+      "permanent": true
+    },
+    {
+      "source": "/nati-the-edge-of-softness",
+      "destination": "/models/nati-the-edge-of-softness/",
+      "permanent": true
+    },
+    {
+      "source": "/francesca-petrosino-backstage-bw",
+      "destination": "/models/francesca-petrosino-backstage-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-backstage",
+      "destination": "/models/benedetta-backstage/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-erotic-bw",
+      "destination": "/models/benedetta-erotic-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-red-lingerie",
+      "destination": "/models/veronica-red-lingerie/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-sexy-kinder",
+      "destination": "/models/benedetta-sexy-kinder/",
+      "permanent": true
+    },
+    {
+      "source": "/noemi-bw",
+      "destination": "/models/noemi-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-transparent-lingerie",
+      "destination": "/models/benedetta-transparent-lingerie/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-black-elegance",
+      "destination": "/models/veronica-black-elegance/",
+      "permanent": true
+    },
+    {
+      "source": "/awa-analogic-shoot",
+      "destination": "/models/awa-analogic-shoot/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-sweet-night",
+      "destination": "/models/veronica-sweet-night/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-lingerie-1",
+      "destination": "/models/benedetta-lingerie-1/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-black-suits",
+      "destination": "/models/veronica-black-suits/",
+      "permanent": true
+    },
+    {
+      "source": "/veronica-sexy-window",
+      "destination": "/models/veronica-sexy-window/",
+      "permanent": true
+    },
+    {
+      "source": "/awa-in-orange",
+      "destination": "/models/awa-in-orange/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-lingerie",
+      "destination": "/models/benedetta-lingerie/",
+      "permanent": true
+    },
+    {
+      "source": "/annalinda-barini-black-and-white",
+      "destination": "/models/annalinda-barini-black-and-white/",
+      "permanent": true
+    },
+    {
+      "source": "/elisabetta-braschi-chair",
+      "destination": "/models/elisabetta-braschi-chair/",
+      "permanent": true
+    },
+    {
+      "source": "/awa-black-body",
+      "destination": "/models/awa-black-body/",
+      "permanent": true
+    },
+    {
+      "source": "/sara-reggio-analogic-set",
+      "destination": "/models/sara-reggio-analogic-set/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-dark",
+      "destination": "/models/silvia-amati-dark/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-red-dreams",
+      "destination": "/models/benedetta-red-dreams/",
+      "permanent": true
+    },
+    {
+      "source": "/elisabetta-braschi-bathroom",
+      "destination": "/models/elisabetta-braschi-bathroom/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-ribs-colors",
+      "destination": "/models/silvia-amati-ribs-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-bw-analogic",
+      "destination": "/models/silvia-amati-bw-analogic/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-color",
+      "destination": "/models/silvia-amati-color/",
+      "permanent": true
+    },
+    {
+      "source": "/elisabetta-braschi-red-and-white",
+      "destination": "/models/elisabetta-braschi-red-and-white/",
+      "permanent": true
+    },
+    {
+      "source": "/sara-sudati-colors",
+      "destination": "/models/sara-sudati-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/annalinda-barini-colors",
+      "destination": "/models/annalinda-barini-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-mirror-bw",
+      "destination": "/models/silvia-amati-mirror-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-bw",
+      "destination": "/models/silvia-amati-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/silvia-amati-rock-and-roll-colors",
+      "destination": "/models/silvia-amati-rock-and-roll-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/sara-sudati-bw",
+      "destination": "/models/sara-sudati-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/awa-tropea",
+      "destination": "/models/awa-tropea/",
+      "permanent": true
+    },
+    {
+      "source": "/people-in-museums",
+      "destination": "/projects/people-in-museums/",
+      "permanent": true
+    },
+    {
+      "source": "/film-replication",
+      "destination": "/projects/film-replication/",
+      "permanent": true
+    },
+    {
+      "source": "/2025-philadelphia-and-boston",
+      "destination": "/travels/2025-philadelphia-and-boston/",
+      "permanent": true
+    },
+    {
+      "source": "/2025-new-york",
+      "destination": "/travels/2025-new-york/",
+      "permanent": true
+    },
+    {
+      "source": "/brutalism-in-skopje",
+      "destination": "/travels/brutalism-in-skopje/",
+      "permanent": true
+    },
+    {
+      "source": "/marocco-bw",
+      "destination": "/travels/marocco-bw/",
+      "permanent": true
+    },
+    {
+      "source": "/lido-venezia-fish-eyes",
+      "destination": "/travels/lido-venezia-fish-eyes/",
+      "permanent": true
+    },
+    {
+      "source": "/in-barcellona-people-love-each-other",
+      "destination": "/travels/in-barcellona-people-love-each-other/",
+      "permanent": true
+    },
+    {
+      "source": "/from-lion-to-bordeaux",
+      "destination": "/travels/from-lion-to-bordeaux/",
+      "permanent": true
+    },
+    {
+      "source": "/sicily-2021",
+      "destination": "/travels/sicily-2021/",
+      "permanent": true
+    },
+    {
+      "source": "/showers-in-tropea",
+      "destination": "/travels/showers-in-tropea/",
+      "permanent": true
+    },
+    {
+      "source": "/sicilia-2020",
+      "destination": "/travels/sicilia-2020/",
+      "permanent": true
+    },
+    {
+      "source": "/fuerteventura-2020",
+      "destination": "/travels/fuerteventura-2020/",
+      "permanent": true
+    },
+    {
+      "source": "/the-new-normality",
+      "destination": "/travels/the-new-normality/",
+      "permanent": true
+    },
+    {
+      "source": "/genova-2020-post-covid-lockdown",
+      "destination": "/travels/genova-2020-post-covid-lockdown/",
+      "permanent": true
+    },
+    {
+      "source": "/eleana-occupied-stillness",
+      "destination": "/erotic/eleana-occupied-stillness/",
+      "permanent": true
+    },
+    {
+      "source": "/iris-rituals-of-stillness",
+      "destination": "/erotic/iris-rituals-of-stillness/",
+      "permanent": true
+    },
+    {
+      "source": "/dafne-in-her-home",
+      "destination": "/erotic/dafne-in-her-home/",
+      "permanent": true
+    },
+    {
+      "source": "/eleana-bath-tub",
+      "destination": "/erotic/eleana-bath-tub/",
+      "permanent": true
+    },
+    {
+      "source": "/akane-shibari-set-1",
+      "destination": "/erotic/akane-shibari-set-1/",
+      "permanent": true
+    },
+    {
+      "source": "/akane-shibari-set",
+      "destination": "/erotic/akane-shibari-set/",
+      "permanent": true
+    },
+    {
+      "source": "/iris-nude-project",
+      "destination": "/erotic/iris-nude-project/",
+      "permanent": true
+    },
+    {
+      "source": "/eleana-silvestri",
+      "destination": "/erotic/eleana-silvestri/",
+      "permanent": true
+    },
+    {
+      "source": "/sofia-repele",
+      "destination": "/erotic/sofia-repele/",
+      "permanent": true
+    },
+    {
+      "source": "/sogia-repele-colors",
+      "destination": "/erotic/sogia-repele-colors/",
+      "permanent": true
+    },
+    {
+      "source": "/stella-di-plastica-analogic-set",
+      "destination": "/erotic/stella-di-plastica-analogic-set/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-nude-mirror",
+      "destination": "/erotic/benedetta-nude-mirror/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-nude-at-the-window",
+      "destination": "/erotic/benedetta-nude-at-the-window/",
+      "permanent": true
+    },
+    {
+      "source": "/benedetta-nude",
+      "destination": "/erotic/benedetta-nude/",
+      "permanent": true
+    },
+    {
+      "source": "/stretch-marks",
+      "destination": "/erotic/stretch-marks/",
+      "permanent": true
+    },
+    {
+      "source": "/haribo-coccodri",
+      "destination": "/erotic/haribo-coccodri/",
+      "permanent": true
+    },
+    {
+      "source": "/halloween-mask-nude",
+      "destination": "/erotic/halloween-mask-nude/",
+      "permanent": true
+    },
+    {
+      "source": "/shibari-set-4-with-at-martatenshiko",
+      "destination": "/erotic/shibari-set-4-with-at-martatenshiko/",
+      "permanent": true
+    },
+    {
+      "source": "/shibari-set-3-with-at-auromineo",
+      "destination": "/erotic/shibari-set-3-with-at-auromineo/",
+      "permanent": true
+    },
+    {
+      "source": "/shibari-set-2-with-at-martatenshiko",
+      "destination": "/erotic/shibari-set-2-with-at-martatenshiko/",
+      "permanent": true
+    },
+    {
+      "source": "/shibari-set-1-with-at-auromineo",
+      "destination": "/erotic/shibari-set-1-with-at-auromineo/",
+      "permanent": true
+    },
+    {
+      "source": "/models",
+      "destination": "/archive/",
+      "permanent": true
+    },
+    {
+      "source": "/projects",
+      "destination": "/archive/",
+      "permanent": true
+    },
+    {
+      "source": "/work",
+      "destination": "/archive/",
+      "permanent": true
+    },
+    {
+      "source": "/erotic",
+      "destination": "/archive/",
+      "permanent": true
+    }
+  ]
+}

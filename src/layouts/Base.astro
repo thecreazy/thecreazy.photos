@@ -38,6 +38,8 @@ const imageUrl = new URL(image, site).href;
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={imageUrl} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
   <body class={bodyClass}><slot /></body>

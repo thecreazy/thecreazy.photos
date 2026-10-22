@@ -35,6 +35,8 @@ Needs Node ≥ 22.23. The repo contains no photos (see below), so the roll is em
 | `pnpm preview`     | Serve the build locally                                                |
 | `pnpm foto [slug]` | Build web variants from `masters/` (every shooting if no slug)         |
 | `pnpm upload`      | Copy `public/photos/` to the Spaces bucket (needs `rclone` remote `canellariccardo`) |
+| `pnpm favicon`     | Redraw `public/favicon.svg`, `favicon.ico` and `apple-touch-icon.png` (serif R + red pencil stroke) |
+| `pnpm redirects`   | Rebuild the `redirects` list in `vercel.json` (old Adobe URLs → new ones) from `redirects.csv` |
 | `pnpm migrate`     | One-off: draft shootings + `redirects.csv` scraped from the old site   |
 
 ## Adding a shooting
@@ -112,7 +114,7 @@ The 85 shootings imported by `pnpm migrate` are **drafts**: dates are year-only,
 
 ## Deploy
 
-Planned: Cloudflare Pages. Photos live on DigitalOcean Spaces (one bucket per site); `PUBLIC_PHOTO_BASE_URL` points the site at it. Details in `docs/GO-LIVE.md`. Pages under `/erotic/` are `noindex`.
+Hosting: Vercel (static Astro build, config in `vercel.json`). Photos live on DigitalOcean Spaces (one bucket per site); `PUBLIC_PHOTO_BASE_URL` points the site at it. Details in `docs/GO-LIVE.md`. Pages under `/erotic/` are `noindex`.
 
 ## More
 
