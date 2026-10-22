@@ -119,3 +119,4 @@ Hosting: Vercel (static Astro build, config in `vercel.json`). Photos live on Di
 ## More
 
 `CLAUDE.md` holds the working rules and the list of ideas already discarded.
+# thecreazy.photos
