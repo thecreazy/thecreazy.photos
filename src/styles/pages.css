@@ -18,3 +18,19 @@
 .pg .contact span{display:block;font:11px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:28px}
 body.paper{background:var(--paper);color:var(--ink)}
 @media (max-width:760px){.pg{padding:0 16px 80px}}
+
+/* 404: a strip of film with one frame that didn't come out */
+body.nf{background:var(--bg);color:var(--light)}
+.nf-wrap{min-height:100vh;display:grid;align-content:center;justify-items:center;gap:22px;padding:40px 20px;text-align:center}
+.nf-strip{position:relative;display:flex;gap:2.2%;width:min(900px,92vw);padding:34px 3% 34px;background:#7a4524;border-radius:2px;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.nf-strip::before,.nf-strip::after{content:'';position:absolute;left:0;right:0;height:11px;background:repeating-linear-gradient(90deg,transparent 0 9px,#f1ece1 9px 21px,transparent 21px 30px);opacity:.92}
+.nf-strip::before{top:11px}
+.nf-strip::after{bottom:11px}
+.nf-frame{flex:1;aspect-ratio:3/2;background:radial-gradient(ellipse at 40% 35%,#2a1a11,#120b07 70%);border-radius:2px}
+.nf-frame.blank{display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,#caa07a,#8e5a37 80%)}
+.nf-frame.blank span{font:400 clamp(44px,9vw,84px)/1 var(--marker);color:var(--red);transform:rotate(-3deg);text-shadow:0 0 1px rgba(0,0,0,.4)}
+.nf h1{font:italic 400 clamp(34px,5vw,60px)/1.05 var(--serif);margin:10px 0 0}
+.nf-wrap p{margin:0;color:var(--mute);max-width:44ch}
+.nf-links{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:6px!important}
+.nf-links a{color:var(--light);text-decoration:none;border-bottom:1px solid rgba(239,231,218,.3);padding-bottom:2px}
+.nf-links a:hover{color:var(--red);border-color:var(--red)}

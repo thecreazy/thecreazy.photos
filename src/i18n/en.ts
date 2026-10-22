@@ -42,7 +42,7 @@ export const t = {
     back: '← roll',
     hint: 'pull the print out ↓',
     negatives: 'the negatives',
-    negativesHint: 'hover to see them as positives · circled: the picks',
+    negativesHint: 'hover to see them as positives · marked in red: the picks',
     prints: 'the prints',
     frames: (n: number) => `${n} ${n === 1 ? 'frame' : 'frames'}`,
     previous: '← previous envelope',
@@ -51,6 +51,12 @@ export const t = {
     alt: (name: string, i: number) => `${name}, frame ${i}`,
   },
   archive: { title: 'Archive', sub: 'every roll', count: (n: number) => `archive · ${n} shoots`, photos: (n: number) => `${n} photos` },
+  notFound: {
+    code: '404',
+    title: "This frame didn't come out",
+    text: "That page isn't on this roll. The link may be old or mistyped.",
+    back: '← back to the roll',
+  },
   contact: {
     title: 'Write to me',
     sub: 'for a portrait, a project, a coffee',

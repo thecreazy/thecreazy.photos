@@ -1,0 +1,19 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import { t } from '../i18n/en';
+
+const n = t.notFound;
+---
+<Base title={n.code} description={n.text} noindex bodyClass="nf">
+  <main class="nf-wrap">
+    <div class="nf-strip" aria-hidden="true">
+      <div class="nf-frame"></div>
+      <div class="nf-frame blank"><span>{n.code}</span></div>
+      <div class="nf-frame"></div>
+    </div>
+    <h1>{n.title}</h1>
+    <p>{n.text}</p>
+    <p class="nf-links"><a href="/">{n.back}</a><a href="/archive/">{t.nav.archive}</a><a href="/contact/">{t.nav.contact}</a></p>
+  </main>
+</Base>
