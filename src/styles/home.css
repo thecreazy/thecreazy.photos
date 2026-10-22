@@ -34,7 +34,21 @@ html.home,body.home{height:100%;overflow:hidden}
 #loader.done{opacity:0;pointer-events:none}
 #bar{width:220px;height:1px;background:#2b2622;margin:auto}
 #bar i{display:block;height:100%;width:0;background:var(--red);transition:width .15s}
-@media (max-width:760px){#hint{display:none}#nav{top:62px;left:26px;right:auto;justify-content:flex-start;gap:12px}#timeline{bottom:30px}}
+/* desktop vs touch wording */
+.h-t{display:none}
+@media (pointer:coarse){.h-d{display:none}.h-t{display:inline}}
+@media (max-width:760px){#hint{bottom:8px;font-size:10px}#nav{top:62px;left:26px;right:auto;justify-content:flex-start;gap:12px}#timeline{bottom:34px}}
+/* portrait phone: the roll runs vertically, so the HUD uses the bands above and below it */
+html.vert #brand{left:16px;top:16px;font-size:22px}
+html.vert #brand small{font-size:10px;margin-top:5px}
+html.vert #nav{top:72px;left:16px;right:16px;gap:0;justify-content:space-between;flex-wrap:nowrap;font-size:10px;letter-spacing:.05em}
+html.vert #title{top:118px;bottom:auto;padding:0 16px}
+html.vert #tName{font-size:clamp(30px,9.4vw,44px);line-height:1}
+html.vert #tSec{font-size:10px;margin-bottom:8px}
+html.vert #meta{top:auto;bottom:84px;font-size:10.5px;padding:0 12px}
+html.vert #timeline{width:calc(100vw - 32px);bottom:48px}
+html.vert #hint{bottom:14px}
+html.vert body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(#0b0908 0,rgba(11,9,8,.9) 150px,rgba(11,9,8,0) 300px,rgba(11,9,8,0) 66%,rgba(11,9,8,.88) 84%,#0b0908 100%)}
 /* no WebGL / no JS: the same content as a plain HTML list. With WebGL it stays in the DOM (SEO, screen readers) but off-screen. */
 .roll-list{max-width:1160px;margin:0 auto;padding:90px 32px 120px;color:var(--light)}
 .roll-list h1{font:400 clamp(40px,6vw,80px)/1 var(--serif);margin:0 0 40px}
@@ -57,3 +71,15 @@ html:not(.js) #gl,html:not(.js) #loader,html:not(.js) #vig,html:not(.js) #grain{
 #darkroom.lit #drCap,#darkroom.lit #dial{opacity:0}
 html:not(.js) #darkroom{display:none}
 @media (max-width:760px){#dial{right:16px;bottom:16px;width:64px;height:64px}}
+
+/* phone turned sideways: very little height, so the HUD shrinks and gives way to the roll */
+@media (max-height:520px) and (orientation:landscape){
+  #brand{top:12px;left:16px;font-size:18px}
+  #brand small{display:none}
+  #nav{top:14px;right:16px;gap:12px;font-size:10px;letter-spacing:.06em}
+  #tSec{display:none}
+  #tName{font-size:28px}
+  #meta{font-size:10px}
+  #hint{display:none}
+  #timeline{bottom:12px}
+}

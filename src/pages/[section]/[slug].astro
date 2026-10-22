@@ -60,7 +60,7 @@ for (let i = 0, p = 0; i < others.length; p++) {
   <section class="b-neg" id="negatives" data-slug={s.slug} data-bw={String(!!s.bw)}
     data-selected={JSON.stringify(s.selected.map((i) => i - 1))}
     data-film={JSON.stringify(s.photos.map((f) => filmUrl(s.slug, f)))}>
-    <div class="b-label"><span>{t.project.negatives}</span><small>{t.project.negativesHint}</small></div>
+    <div class="b-label"><span>{t.project.negatives}</span><small><span class="h-d">{t.project.negativesHint}</span><span class="h-t">{t.project.negativesHintTouch}</span></small></div>
     <div class="sleeve" id="sleeve"></div>
   </section>
 

@@ -30,7 +30,7 @@ function init(): Dr | null {
   const U = {
     tPrint: { value: null }, uRes: { value: new Vector2() }, uPaperHalf: { value: new Vector2() }, uImgHalf: { value: new Vector2() },
     uPrintPos: { value: new Vector2(0.03, -0.02) }, uRingPos: { value: new Vector2() },
-    uScale: { value: 1.3 }, uT: { value: 0 }, uDev: { value: 0 }, uLight: { value: 0 }, uEntry: { value: 0 }, uZoom: { value: 0 }, uZoomK: { value: 0.6 },
+    uPortrait: { value: 0 }, uScale: { value: 1.3 }, uT: { value: 0 }, uDev: { value: 0 }, uLight: { value: 0 }, uEntry: { value: 0 }, uZoom: { value: 0 }, uZoomK: { value: 0.6 },
     uSeiche: { value: 0 }, uSeiche2: { value: 0 }, uRingT: { value: 99 }, uBW: { value: 0 }, uFade: { value: 0 }, uPrintRot: { value: 0 },
   };
   const mat = new ShaderMaterial({
@@ -61,21 +61,36 @@ function buildDial() {
   $('dial').innerHTML = `<defs><filter id="lum"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#lum)">${svg}</g>`;
 }
 
+let cur: { src: PrintSource; bw: boolean } | null = null;
+const isPortrait = () => innerWidth / innerHeight < 0.85;
+
 function setPrintImage(src: PrintSource, bw: boolean) {
+  cur = { src, bw };
   const d = dr!, a = src.width / src.height, max = 2048;
+  d.U.uPortrait.value = isPortrait() ? 1 : 0;
   const w = a >= 1 ? max : Math.round(max * a), h = a >= 1 ? Math.round(max / a) : max;
   const c = cvs(w, h); c.getContext('2d')!.drawImage(src, 0, 0, w, h);
   d.tex?.dispose(); d.tex = new CanvasTexture(c); d.tex.anisotropy = 8; d.U.tPrint.value = d.tex;
-  const bx = 0.6, by = 0.42, ih = a > bx / by ? [bx, bx / a] : [by * a, by];
-  d.U.uImgHalf.value.set(ih[0], ih[1]); d.U.uPaperHalf.value.set(ih[0] + 0.034, ih[1] + 0.034); d.U.uBW.value = bw ? 1 : 0;
+  const bx = 0.6, by = 0.42, ih = a > bx / by ? [bx, bx / a] : [by * a, by]; // half extents of the picture, as seen on screen
+  // portrait screens turn the scene a quarter: the picture's width runs along the scene's y axis, its height along x
+  const portrait = d.U.uPortrait.value > 0.5, sx = portrait ? by : bx, sy = portrait ? bx : by;
+  const pa = portrait ? (a >= sx / sy ? [sx, sx / a] : [sy * a, sy]) : ih; // half width, half height on screen, fitted into the limits
+  const half = portrait ? [pa[1], pa[0]] : pa; // scene extents (x, y)
+  d.U.uImgHalf.value.set(half[0], half[1]); d.U.uPaperHalf.value.set(half[0] + 0.034, half[1] + 0.034); d.U.uBW.value = bw ? 1 : 0;
 }
 
 function layout() {
   const d = dr!, W = innerWidth, H = innerHeight, asp = W / H;
   d.r.setSize(W, H, false); d.U.uRes.value.set(W * d.r.getPixelRatio(), H * d.r.getPixelRatio());
-  const sc = Math.max(1.42, 2.0 / asp); d.U.uScale.value = sc;
+  const portrait = isPortrait(), turned = d.U.uPortrait.value !== (portrait ? 1 : 0);
+  d.U.uPortrait.value = portrait ? 1 : 0;
+  if (turned && cur) setPrintImage(cur.src, cur.bw); // the screen was rotated: refit the paper
+  // portrait: the tray (turned to run top to bottom) is as wide as the screen; landscape: as before
+  const sc = portrait ? 1.34 / asp : Math.max(1.42, 2.0 / asp); d.U.uScale.value = sc;
   const ph = d.U.uPaperHalf.value;
-  d.U.uZoomK.value = Math.min(1, Math.max((ph.y * 1.06) / (0.5 * sc), (ph.x * 1.06) / (0.5 * asp * sc)));
+  d.U.uZoomK.value = portrait
+    ? Math.min(1, Math.max((ph.x * 1.06) / (0.5 * sc), (ph.y * 1.06) / (0.5 * asp * sc)))
+    : Math.min(1, Math.max((ph.y * 1.06) / (0.5 * sc), (ph.x * 1.06) / (0.5 * asp * sc)));
 }
 
 const damped = (t: number, t0s: number[], A: number, per: number, tau: number) =>
@@ -85,7 +100,8 @@ const sm = (a: number, b: number, x: number) => { const k = clamp((x - a) / (b -
 
 /** Click / key = jump to the moment the light comes on. */
 function skip() {
-  if (!live) return;
+  // a touch tap is followed by a synthetic click that lands on the darkroom just shown: ignore the first moments
+  if (!live || performance.now() - live.start < 700) return;
   const t = ((performance.now() - live.start) / 1000) * live.speed + live.off;
   if (t < T.light - 0.1) live.off += T.light - 0.1 - t;
 }

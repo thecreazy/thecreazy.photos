@@ -41,8 +41,9 @@ export function buildTimeline() {
 
 export function layoutHUD() {
   const visH = 2 * S.CAMZ * Math.tan(MathUtils.degToRad(S.camera.fov / 2)), px = (S.H / visH) * STRIP_H;
-  $('title').style.bottom = S.H / 2 + px / 2 + 34 + 'px';
-  $('meta').style.top = S.H / 2 + px / 2 + 26 + 'px';
+  // vertical roll: title and data sit in the free bands at the top and bottom (see html.vert in home.css)
+  $('title').style.bottom = S.vertical ? '' : S.H / 2 + px / 2 + 34 + 'px';
+  $('meta').style.top = S.vertical ? '' : S.H / 2 + px / 2 + 26 + 'px';
 }
 
 export function updateHUD() {

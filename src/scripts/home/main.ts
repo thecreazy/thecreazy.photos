@@ -39,7 +39,9 @@ async function main() {
     S.W = innerWidth; S.H = innerHeight;
     renderer.setSize(S.W, S.H, false);
     S.camera.aspect = S.W / S.H;
-    const visW = S.W < 760 ? (S.W > S.H ? 190 : 120) : 250; // visible mm across
+    S.vertical = S.W < 760 && S.H > S.W;
+    document.documentElement.classList.toggle('vert', S.vertical);
+    const visW = S.vertical ? 58 : S.W < 760 ? 190 : 250; // visible mm across the screen's width (vertical: the strip's height fits it)
     S.CAMZ = visW / (2 * Math.tan(MathUtils.degToRad(S.camera.fov / 2)) * S.camera.aspect);
     S.camera.updateProjectionMatrix();
     layoutHUD();
@@ -121,6 +123,7 @@ async function main() {
     // slight parallax
     if (S.inside && !reduced) { par.x = lerp(par.x, (S.mx / S.W - 0.5) * 2, 0.05); par.y = lerp(par.y, (S.my / S.H - 0.5) * 2, 0.05); }
     S.camera.position.set(par.x * 10, -par.y * 6 + Math.sin(time * 0.5) * 0.8, S.CAMZ);
+    S.camera.up.set(S.vertical ? -1 : 0, S.vertical ? 0 : 1, 0); // vertical: +x (the next frames) points down the screen
     S.camera.lookAt(0, 0, -30);
     updateHUD();
     renderer.render(scene, S.camera);

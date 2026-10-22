@@ -57,10 +57,12 @@ html.js .b-prints .print:not(.laid){--in:0;box-shadow:0 40px 90px -20px rgba(0,0
 .b-hint{position:absolute;left:50%;bottom:4vh;transform:translateX(-50%);font:400 30px var(--pen);color:#a89d8f;opacity:0;transition:opacity .4s}
 .b-label{display:flex;align-items:baseline;gap:16px;margin:0 0 26px}
 .b-label span{font:400 44px/1 var(--marker);color:#ece4d6}
+.b-label small span{font:inherit;color:inherit}
 .b-label small{font-size:11px;letter-spacing:.08em;color:#8a8074;text-transform:uppercase}
 .b-neg,.b-prints{scroll-margin-top:70px}
 .b-neg{max-width:1100px;margin:6vh auto 0;padding:0 24px}
 .sleeve{position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 60px rgba(255,246,225,.22),0 0 220px rgba(255,236,200,.14);background:#f3f1ea;min-height:200px}
+.sleeve:has(canvas){min-height:0}
 .sleeve canvas{display:block;width:100%;height:auto}
 .sleeve canvas+canvas{position:absolute;inset:0;opacity:0;transition:opacity .5s}
 .sleeve:hover canvas+canvas{opacity:1}
@@ -108,3 +110,7 @@ html:not(.js) .b-neg{display:none}
   .b-prints .print{--in:1!important;transition:none}
   .next-env,.next-env.go{transition:none}
 }
+
+/* desktop vs touch wording */
+.h-t{display:none}
+@media (pointer:coarse){.h-d{display:none}.h-t{display:inline}}

@@ -104,7 +104,7 @@ redirects.csv                     old URL → new URL, to wire up at deploy
 | 2     | Shooting page (envelope, negatives, prints, next)   | done, checked with synthetic photos |
 | 3     | Home roll                                           | done, checked with synthetic photos |
 | 4     | Darkroom + transition                               | done, checked with real photos (needs bucket CORS for the sharp large print) |
-| 5     | Mobile                                              | to do |
+| 5     | Mobile                                              | done in an emulator (vertical roll on portrait phones); to check on real devices |
 | 6     | Performance, meta/OG, sitemap, redirects, DNS       | to do |
 
 The 85 shootings imported by `pnpm migrate` are **drafts**: dates are year-only, and names, titles, film stock, `selected` and `hero` need a manual pass.

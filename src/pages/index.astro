@@ -36,11 +36,11 @@ const data: HomeData = {
   <div id="title"><div id="tSec"></div><h1 id="tName"></h1></div>
   <div id="meta"></div>
   <div id="timeline"><span id="tlMark"></span></div>
-  <div id="hint">{t.home.hint}</div>
+  <div id="hint"><span class="h-d">{t.home.hint}</span><span class="h-t">{t.home.hintTouch}</span></div>
   <div id="darkroom" aria-hidden="true">
     <canvas id="drgl"></canvas>
     <svg id="dial" viewBox="0 0 100 100"></svg>
-    <div id="drCap">{t.home.developing}</div>
+    <div id="drCap"><span class="h-d">{t.home.developing}</span><span class="h-t">{t.home.developingTouch}</span></div>
   </div>
   <div id="loader"><div>{t.home.loading}</div><div id="bar"><i></i></div></div>
 

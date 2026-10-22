@@ -1,7 +1,7 @@
 import { PerspectiveCamera } from 'three';
 import type { Seg, Stop } from './types';
 
-export interface Drag { x: number; lx: number; moved: boolean }
+export interface Drag { x: number; y: number; lx: number; ly: number; moved: boolean }
 
 /** Shared mutable state of the home scene (one scene per page, so a module singleton is enough). */
 export const S = {
@@ -12,4 +12,6 @@ export const S = {
   segs: [] as Seg[], stops: [] as Stop[],
   cur: null as Stop | null,
   busy: false,
+  /** Portrait phone: the roll runs top to bottom (the camera is rolled), swipe up/down. */
+  vertical: false,
 };

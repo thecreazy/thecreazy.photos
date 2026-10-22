@@ -156,6 +156,7 @@ function negatives() {
   const bw = sec.dataset.bw === 'true';
   const selected: number[] = JSON.parse(sec.dataset.selected ?? '[]');
   const seed = hashStr(sec.dataset.slug ?? '');
+  const per = innerWidth < 760 ? 3 : 6; // strips of three on phones, so the frames aren't tiny
   const io = new IntersectionObserver((es) => {
     if (!es[0].isIntersecting) return;
     io.disconnect();
@@ -166,7 +167,7 @@ function negatives() {
       im.src = src;
     }))).then((imgs) => {
       if (!imgs.some(Boolean)) return;
-      host.replaceChildren(sleeveSheet({ n: film.length, bw, imgs, selected, seed }, false), sleeveSheet({ n: film.length, bw, imgs, selected, seed }, true));
+      host.replaceChildren(sleeveSheet({ n: film.length, bw, imgs, selected, seed, per }, false), sleeveSheet({ n: film.length, bw, imgs, selected, seed, per }, true));
     });
   }, { rootMargin: '600px' });
   io.observe(sec);

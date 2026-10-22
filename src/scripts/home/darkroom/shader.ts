@@ -1,7 +1,9 @@
-// Darkroom fragment shader, verbatim from DR_FS in reference/rullino.html (top-down tray, liquid, safelight → neon).
+// Darkroom fragment shader, from DR_FS in reference/rullino.html (top-down tray, liquid, safelight → neon).
+// Verbatim except for `uPortrait`: on tall screens the scene is turned a quarter so the tray runs top to bottom (marked below).
 export const DR_FS = `precision highp float;
 uniform sampler2D tPrint;
 uniform vec2 uRes, uPaperHalf, uImgHalf, uPrintPos, uRingPos;
+uniform float uPortrait;
 uniform float uScale, uT, uDev, uLight, uEntry, uZoom, uZoomK, uSeiche, uSeiche2, uRingT, uBW, uFade, uPrintRot;
 varying vec2 vUv;
 #define PI 3.14159265
@@ -26,9 +28,10 @@ float height(vec2 p, float m){
   return h;
 }
 void main(){
-  vec2 s = (vUv-0.5)*vec2(uRes.x/uRes.y,1.0);
-  float w = 1.0-0.34*s.y*(1.0-0.8*uZoom);
-  vec2 p = s*uScale/w; p.y *= mix(1.2,1.0,uZoom); p.y += 0.02;
+  vec2 s0 = (vUv-0.5)*vec2(uRes.x/uRes.y,1.0);
+  vec2 s = uPortrait > 0.5 ? vec2(s0.y,-s0.x) : s0;          // portrait: scene x = screen up, scene y = screen left
+  float w = 1.0-0.34*s0.y*(1.0-0.8*uZoom);
+  vec2 p = s*uScale/w; if (uPortrait > 0.5) p.x *= mix(1.2,1.0,uZoom); else p.y *= mix(1.2,1.0,uZoom); p.y += 0.02;
   p = mix(p, uPrintPos+(p-uPrintPos)*uZoomK, uZoom);
   float idx = clamp(floor(p.x/PITCH+0.5),-1.0,1.0), m = 1.0-abs(idx);
   vec2 lp = p-vec2(idx*PITCH,0.0);
@@ -55,7 +58,7 @@ void main(){
       col *= 1.0-0.3*uEntry*(1.0-smoothstep(-0.01,0.05,sh));
       if (dP < 0.002) {
         vec3 paper = vec3(0.965,0.955,0.93)*(0.975+0.025*fbm(q*40.0));
-        vec2 iuv = q/(2.0*uImgHalf)+0.5;
+        vec2 iuv = uPortrait > 0.5 ? vec2(0.5-q.y/(2.0*uImgHalf.y), 0.5+q.x/(2.0*uImgHalf.x)) : q/(2.0*uImgHalf)+0.5;   // portrait: the photo stays upright on screen
         float inImg = (1.0-smoothstep(-0.0015,0.0015,abs(q.x)-uImgHalf.x))*(1.0-smoothstep(-0.0015,0.0015,abs(q.y)-uImgHalf.y));
         vec3 tex = texture2D(tPrint,iuv).rgb;
         float Dt = 1.0-dot(tex,vec3(0.299,0.587,0.114));
@@ -103,7 +106,7 @@ void main(){
   vec3 safe = vec3(1.0,0.2,0.07)*pow(lum,1.1)*0.74 + vec3(1.0,0.5,0.3)*spec*0.85;
   vec3 lit = col*vec3(1.03,1.0,0.96) + vec3(0.95)*tube*0.55 + spec*0.05;
   vec3 o = mix(safe, lit, uLight);
-  o *= mix(1.0, smoothstep(1.3,0.2,length(s*vec2(0.85,1.15))), mix(0.9,0.5,uLight));
+  o *= mix(1.0, smoothstep(1.3,0.2,length(s0*vec2(0.85,1.15))), mix(0.9,0.5,uLight));
   o += (h21(vUv*uRes+fract(uT*13.7)*517.0)-0.5)*mix(0.05,0.018,uLight);
   gl_FragColor = vec4(o*uFade,1.0);
 }`;

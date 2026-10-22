@@ -48,22 +48,25 @@ export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
   canvas.addEventListener('wheel', (e) => { e.preventDefault(); if (!S.busy) nudge((Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * 0.32); }, { passive: false });
   canvas.addEventListener('pointerdown', (e) => {
     S.mx = e.clientX; S.my = e.clientY; S.inside = true;
-    S.drag = { x: e.clientX, lx: e.clientX, moved: false };
+    S.drag = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, moved: false };
     canvas.setPointerCapture(e.pointerId);
   });
   canvas.addEventListener('pointermove', (e) => {
     S.mx = e.clientX; S.my = e.clientY; S.inside = true;
     const d = S.drag;
     if (!d) return;
-    if (Math.abs(e.clientX - d.x) > 5) d.moved = true;
-    if (d.moved) { nudge(-(e.clientX - d.lx) * mmPerPx()); d.lx = e.clientX; }
+    if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 6) d.moved = true;
+    if (d.moved) {
+      nudge(-(S.vertical ? e.clientY - d.ly : e.clientX - d.lx) * mmPerPx()); // finger up = film moves up = next frame
+      d.lx = e.clientX; d.ly = e.clientY;
+    }
   });
   canvas.addEventListener('pointerup', () => { if (S.drag && !S.drag.moved) click(); S.drag = null; });
   canvas.addEventListener('pointerleave', () => { S.inside = false; });
   addEventListener('keydown', (e) => {
     if (S.busy) return;
-    if (e.key === 'ArrowRight') step(1);
-    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') step(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') step(-1);
     if (e.key === 'Enter' && S.cur && S.cur.fi >= 0) {
       const roll = S.cur.seg.roll!;
       hooks.open(roll, S.cur.fi);

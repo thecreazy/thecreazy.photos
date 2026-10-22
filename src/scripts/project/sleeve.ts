@@ -5,7 +5,7 @@ import { RED } from '../home/constants';
 import { bowPts, ellipsePts, waxLine } from '../home/draw';
 
 const TAU = Math.PI * 2;
-const STRIP_H = 35, PITCH = 38, FW = 36, FH = 24, STRIP_W = 232;
+const STRIP_H = 35, PITCH = 38, FW = 36, FH = 24;
 const cvs = (w: number, h: number) => Object.assign(document.createElement('canvas'), { width: Math.round(w), height: Math.round(h) });
 
 function coverDraw(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
@@ -13,7 +13,7 @@ function coverDraw(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: numb
   ctx.drawImage(img, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih);
 }
 
-export interface SleeveInput { n: number; bw: boolean; imgs: (HTMLImageElement | null)[]; selected: number[]; seed: number }
+export interface SleeveInput { n: number; bw: boolean; imgs: (HTMLImageElement | null)[]; selected: number[]; seed: number; per?: number }
 
 type Mark = 'circle' | 'box' | 'underline' | 'tick';
 const MARKS: Mark[] = ['circle', 'box', 'underline', 'tick'];
@@ -43,9 +43,10 @@ function mark(x: CanvasRenderingContext2D, kind: Mark, fx: number, fy: number, w
   }
 }
 
-export function sleeveSheet({ n: total, bw, imgs, selected, seed }: SleeveInput, pos: boolean) {
+export function sleeveSheet({ n: total, bw, imgs, selected, seed, per = 6 }: SleeveInput, pos: boolean) {
+  const STRIP_W = 3 + per * PITCH + 1;
   const picks = new Map([...selected].sort((a, b) => a - b).map((i, k) => [i, MARKS[(seed + k) % MARKS.length]] as const));
-  const S = 5, per = 6, rows = Math.ceil(total / per), PH = 44, MX = 22, MY = 14;
+  const S = 5, rows = Math.ceil(total / per), PH = 44, MX = 22, MY = 14;
   const w = (STRIP_W + MX * 2) * S, h = (rows * PH + MY * 2) * S;
   const c = cvs(w, h), x = c.getContext('2d')!;
   let g = x.createRadialGradient(w * 0.5, h * 0.45, 0, w * 0.5, h * 0.5, w * 0.7);
