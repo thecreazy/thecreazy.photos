@@ -13,7 +13,6 @@ const years = all.map((s) => +s.date.slice(0, 4));
 const span = years.length ? `${Math.min(...years)}—${Math.max(...years)}` : '';
 
 const data: HomeData = {
-  labels: {},
   rolls: onRoll.map((s) => {
     const shown = s.selected.map((i) => i - 1);
     return {
@@ -27,13 +26,13 @@ const data: HomeData = {
 };
 ---
 <Base bodyClass="home" htmlClass="home" description={t.meta.home}>
-  <canvas id="gl"></canvas>
+  <canvas id="gl" aria-hidden="true"></canvas>
   <div id="vig"></div>
   <div id="grain"></div>
   <div id="fade"></div>
   <header id="brand"><a href="/" style="text-decoration:none">{t.brand}</a><small>{t.brandSub}{span && ` · ${span}`}</small></header>
-  <nav id="nav" aria-label="Sections"></nav>
-  <div id="title"><div id="tSec"></div><h1 id="tName"></h1></div>
+  <nav id="nav" aria-label={t.nav.sections}></nav>
+  <div id="title"><div id="tSec"></div><h2 id="tName"></h2></div>
   <div id="meta"></div>
   <div id="timeline"><span id="tlMark"></span></div>
   <div id="hint"><span class="h-d">{t.home.hint}</span><span class="h-t">{t.home.hintTouch}</span></div>

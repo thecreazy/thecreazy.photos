@@ -1,9 +1,9 @@
 :root {
   --ink: #1d1a17;
-  --dim: #837a6f;
+  --dim: #6c6358;
   --paper: #f4efe6;
   --light: #efe7da;
-  --mute: rgba(239, 231, 218, 0.5);
+  --mute: rgba(239, 231, 218, 0.58);
   --bg: #0b0908;
   --red: #c4162a; /* grease pencil */
   --blue: #1d2a4a; /* pen ink */
@@ -12,9 +12,9 @@
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   --marker: 'Covered By Your Grace', cursive;
   --pen: 'Nanum Pen Script', cursive;
-  --t-paper: none; /* runtime-generated textures (scripts/project/textures.ts); plain colour until then */
-  --t-kraft: none;
-  --t-grain: none;
+  --t-paper: url(/tex/paper.jpg); /* pre-rendered by `pnpm textures` (tools/textures.mjs) */
+  --t-kraft: url(/tex/kraft.jpg);
+  --t-grain: url(/tex/grain.jpg);
 }
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--light); font: 13px/1.45 var(--mono); }
@@ -23,3 +23,5 @@ a { color: inherit; }
 /* cross-document fade between the darkroom's last frame and the project page */
 @view-transition { navigation: auto; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+/* darkroom → shooting page: a slow, eased dissolve instead of the browser's quick default (type added on pageswap, home/main.ts) */
+html:active-view-transition-type(develop)::view-transition-group(root) { animation-duration: 1.1s; animation-timing-function: cubic-bezier(.45, 0, .2, 1); }

@@ -3,6 +3,9 @@
 import { FH, FW, INK, MARK, MM, PEN, PITCH, STRIP_H, TAU, WAX } from './constants';
 import type { Seg } from './types';
 
+// roundRect needs Safari 16 / Chrome 99 / Firefox 112: older browsers get square corners instead of a dead render loop
+if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x: number, y: number, w: number, h: number) { this.rect(x, y, w, h); };
+
 export const cvs = (w: number, h: number) => Object.assign(document.createElement('canvas'), { width: Math.round(w), height: Math.round(h) });
 
 let grain: HTMLCanvasElement | null = null;

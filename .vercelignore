@@ -1,0 +1,6 @@
+# `vercel deploy` from a laptop would otherwise upload the originals and every photo variant (~700 MB); the photos live on the CDN
+masters/
+public/photos/
+dist/
+.astro/
+node_modules/

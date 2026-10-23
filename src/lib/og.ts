@@ -1,11 +1,12 @@
 // Open Graph images (1200×630), generated at build time from the 700px film frames in public/film.
 // satori turns the layout into SVG (text becomes paths, so no fonts are needed at render time), sharp rasterises it.
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import satori from 'satori';
 import sharp from 'sharp';
 import { t } from '../i18n/en';
-import type { Shooting } from './shooting';
+import { filmPath, type Shooting } from './shooting';
 
 const W = 1200, H = 630;
 const COL = { bg: '#0b0908', paper: '#f4efe6', light: '#efe7da', dim: '#8a8074', soft: '#a89e91', red: '#c4162a' };
@@ -28,7 +29,9 @@ const h = (type: string, style: Record<string, unknown>, children?: unknown, ext
 
 /** A framed print of a film frame, fitted into a box. */
 async function print(slug: string, file: string, box: [number, number], rotate: number, pos: Record<string, unknown> = {}) {
-  const path = join(process.cwd(), 'public/film', slug, `${file.replace(/\.[^.]+$/, '')}-film.webp`);
+  const film = (p: string) => join(process.cwd(), 'public/film', p);
+  // content-hashed name (tools/foto.mjs); the plain name only exists until `pnpm hashnames` has run
+  const path = existsSync(film(filmPath(slug, file))) ? film(filmPath(slug, file)) : film(`${slug}/${file.replace(/\.[^.]+$/, '')}-film.webp`);
   const buf = await readFile(path);
   const { width = 3, height = 2 } = await sharp(buf).metadata();
   const k = Math.min(box[0] / width, box[1] / height), w = Math.round(width * k), hh = Math.round(height * k);

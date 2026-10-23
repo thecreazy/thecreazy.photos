@@ -98,6 +98,9 @@ const damped = (t: number, t0s: number[], A: number, per: number, tau: number) =
 const lightAt = (k: number) => (k < 0 ? 0 : k < 0.06 ? 0.7 : k < 0.16 ? 0.04 : k < 0.2 ? 0.9 : k < 0.34 ? 0.08 : Math.min(1, 0.82 + (k - 0.34) * 1.4));
 const sm = (a: number, b: number, x: number) => { const k = clamp((x - a) / (b - a), 0, 1); return k * k * (3 - 2 * k); };
 
+/** The large print is read on a canvas, which needs CORS on the photo host; the bucket sends none today, so the fetch would only waste bandwidth. */
+const CORS = import.meta.env.PUBLIC_PHOTO_CORS === '1';
+
 /** Click / key = jump to the moment the light comes on. */
 function skip() {
   // a touch tap is followed by a synthetic click that lands on the darkroom just shown: ignore the first moments
@@ -133,7 +136,7 @@ export function developPrint(roll: Roll, fi: number): Promise<boolean> {
   const k = roll.shown.indexOf(fi), big = k >= 0 ? roll.large[k] : undefined, my = ++token;
   setPrintImage(src, roll.bw);
   // the 700px frame is there instantly; the large version replaces it as soon as it arrives
-  if (big) fetch(big).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 1800, resizeQuality: 'high' }))
+  if (big && CORS) fetch(big).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 1800, resizeQuality: 'high' }))
     .then((bm) => { if (token === my && dr) setPrintImage(bm, roll.bw); }).catch(() => { /* CORS or network: keep the small one */ });
   let seen = false;
   try { seen = sessionStorage.getItem(SEEN_KEY) === '1'; sessionStorage.setItem(SEEN_KEY, '1'); } catch { /* ignore */ }

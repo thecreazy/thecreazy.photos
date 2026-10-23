@@ -18,12 +18,14 @@ export interface RollData {
   large: string[]; // 1400px urls for the darkroom print, same order
   port: boolean[]; // portrait flag, same order as `shown`
 }
-export interface HomeData { rolls: RollData[]; labels: Record<string, string> }
+export interface HomeData { rolls: RollData[] }
 
 export interface Roll extends RollData {
   mask: [number, number, number];
   imgs: Map<number, ImageBitmap>;
   loading: boolean;
+  tries: Map<number, number>; // failed fetches per frame
+  retryAt: number; // performance.now() before which no retry is made
   seg?: Seg;
 }
 export interface Zone { id: string; label: string }

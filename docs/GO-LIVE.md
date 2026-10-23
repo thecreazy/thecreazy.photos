@@ -1,7 +1,10 @@
 # Going live — step by step
 
-State on 2026-10-22: Phases 1–3 are built. This document lists everything still missing before
+State on 2026-10-23: Phases 1–5 are built (the roll, darkroom, project pages, mobile layout), plus 404, SEO/OG/sitemap/robots,
+redirects, security headers and cache rules, a pre-build consistency check and CI. Left: content pass, bucket + CDN, real-device
+checks, the audit's remaining fixes and the DNS switch. This document lists everything still missing before
 `photos.canellariccardo.it` can point at the new site, in the order to do it.
+(§0 is the test report of 2026-10-22; several of its problems have been fixed since.)
 Effort tags: **[R]** = Riccardo (content/accounts), **[C]** = code work, **[R+C]** = together.
 
 ---
@@ -89,19 +92,29 @@ Spaces (region fra1, EU)
    (`public/film/`, committed to git), so the site works without it. CORS only makes the darkroom print sharp (it fetches the 1400 px
    variant from the bucket). At the time of writing Spaces ignored the rule we configured. Allowed origins: `https://photos.canellariccardo.it`, the `*.vercel.app` preview URL, `http://localhost:4321`;
    methods `GET`, `HEAD`.
-4. Install [`rclone`](https://rclone.org/s3/#digitalocean-spaces) and create a remote `do` (provider `DigitalOcean`,
-   endpoint `fra1.digitaloceanspaces.com`, the key from step 2).
-5. Upload after every `pnpm foto`. Files must be public-readable:
+   **Checking it (cannot be done from the repo):**
    ```sh
-   rclone sync public/photos do:photos-riccardo --s3-acl public-read --progress
+   curl -sI -H 'Origin: https://photos.canellariccardo.it' \
+     https://photos-riccardo.fra1.cdn.digitaloceanspaces.com/<slug>/<file>-<hash8>-1400.webp | grep -i '^access-control'
    ```
-   (`sync` mirrors deletions too; use `copy` if unsure.)
+   Expect `access-control-allow-origin: https://photos.canellariccardo.it` (or `*`). If the header is missing: (1) the control-panel CORS UI is
+   sometimes ignored, so re-apply the rule through the S3 API (`s3cmd setcors` or `aws s3api put-bucket-cors --endpoint-url https://fra1.digitaloceanspaces.com`);
+   (2) **purge the CDN cache** (the edge caches the first response, without CORS headers, and does not vary on `Origin`) and repeat the curl;
+   (3) still nothing: give the CDN a custom subdomain (`img.canellariccardo.it`) or move the bucket to Cloudflare R2, which honours CORS.
+   When the header is there, set `PUBLIC_PHOTO_CORS=1` on Vercel: until then the darkroom keeps the 700 px frame and skips the download.
+4. Install [`rclone`](https://rclone.org/s3/#digitalocean-spaces) and create a remote named **`canellariccardo`** (the name `pnpm upload` uses; provider `DigitalOcean`,
+   endpoint `fra1.digitaloceanspaces.com`, the key from step 2).
+5. Upload after every `pnpm foto` with `pnpm upload`: it runs `rclone copy` (never `sync`: a half-populated `public/photos` would delete
+   remote files) with `--s3-acl public-read` and `Cache-Control: public, max-age=31536000, immutable`. Variant names are content-hashed,
+   so old files can stay on the bucket (they are simply no longer linked); delete them by hand when you want the space back.
 6. **Public URL**: start with the CDN endpoint `https://photos-riccardo.fra1.cdn.digitaloceanspaces.com`.
    A nicer `img.canellariccardo.it` is possible through the bucket's CDN → Edit → custom subdomain, but it needs a TLS certificate
    (DigitalOcean's free certificate normally requires the domain's DNS to be on DigitalOcean; otherwise upload your own).
    **To verify when we get there** — not needed for launch.
-7. Cache: file names are **not** hashed. Set the CDN TTL to about a day while editing and raise it later,
-   and use the CDN's *purge cache* when you replace a photo. If you'd rather cache for a year, the pipeline can add a content hash to the names (small change).
+7. Cache: file names **are** hashed (`01-1a2b3c4d-1400.avif`, the first 8 chars of the master's sha1), so replacing a photo changes its URLs
+   and nothing needs purging; the CDN and browsers can keep every variant for a year. **One-off migration:** the files created before this
+   change have plain names. Run `pnpm hashnames` (renames them in place, no re-encoding, idempotent) *before* `pnpm foto`, commit the renamed
+   `public/film`, then `pnpm upload`. `pnpm check` warns until it is done (CI runs it with `--strict`).
 8. Keep `masters/` backed up elsewhere: the bucket only holds the web variants.
 
 Site side: `PUBLIC_PHOTO_BASE_URL=https://photos-riccardo.fra1.cdn.digitaloceanspaces.com` (no trailing slash).
@@ -114,15 +127,15 @@ bucket name. The total of all buckets counts against the same 250 GiB / 1 TiB.
 Ordered by importance. Items marked ★ are blockers.
 
 1. ~~**Phase 4 — darkroom + transition.**~~ Done (shader and `DR_T` timings ported unchanged, shortened from the 2nd visit, skipped with reduced motion). Still to check on a real GPU and a phone.
-2. ★ **Phase 5 — mobile.** Portrait layout for the roll, the darkroom and the envelope; touch swipe; nav that doesn't wrap onto the brand.
-3. ★ **404 page** (`src/pages/404.astro`) in the site's style, with a link back to the roll.
+2. ~~★ **Phase 5 — mobile.**~~ **Done** (real-device check still open, item 9). Portrait layout for the roll, the darkroom and the envelope; touch swipe; nav that doesn't wrap onto the brand.
+3. ~~★ **404 page**~~ **Done.** (`src/pages/404.astro`) in the site's style, with a link back to the roll.
 4. ~~★ **SEO basics**~~ **Done** (kept here for reference): `@astrojs/sitemap` (Erotics included), `robots.txt`, `site` in `astro.config.mjs`,
    canonical URLs, Open Graph / Twitter tags (title, description, image = the hero print variant), meta description on home/Archive/Contact,
    JSON-LD `Person`/`ImageObject` optional.
-5. ~~★ **Redirects**~~ **Done**: `pnpm redirects` writes the `redirects` list of `vercel.json` (85 shootings + the old section pages `/models`, `/projects`, `/work`, `/erotic` → Archive; 301, with and without trailing slash). Test on the `vercel.app` URL once deployed.
-6. **Favicon / social image**: replace the Astro default `favicon.svg`; make a 1200×630 `og.jpg`.
-7. **Performance pass** (Lighthouse on a real build with real photos): font preload/subset, image `sizes`, home initial JS weight
-   (three.js ~600 KB min), memory on phones, a mobile-GPU check of the shaders.
+5. ~~★ **Redirects**~~ **Done**: `pnpm redirects` writes the `redirects` list of `vercel.json` (85 shootings + the old section pages `/models`, `/projects`, `/work`, `/erotic` → Archive; 301; every source is emitted both without and with the trailing slash, plus `/sitemap.xml` → `/sitemap-index.xml`). Test on the `vercel.app` URL once deployed (§ 6).
+6. ~~**Favicon / social image**~~ **Done**: `pnpm favicon`, and a 1200×630 preview per shooting plus a site-wide one, generated at build time.
+7. **Performance pass** (Lighthouse on a real build with real photos): fonts are now latin-only subsets with the two main faces preloaded;
+   still open: image `sizes`, memory on phones, a mobile-GPU check of the shaders. The home JS is ~486 KB min / 125 KB gzip (three.js).
 8. **Accessibility pass**: keyboard on the roll (← → Enter works; check focus on the HUD), `alt` text, contrast of HUD text, the lightbox focus trap.
 9. **Real-device checks**: Safari (macOS + iOS), Firefox, an Android phone. WebGL fallbacks were only tested by disabling JS.
 10. Nice to have: analytics (Vercel Web Analytics, or any cookie-less one), 18+ page-level notice if you ever change your mind about the gate.
@@ -133,8 +146,10 @@ Ordered by importance. Items marked ★ are blockers.
 2. Vercel → Add New → **Project** → import the repo. The framework is detected as Astro (static, no adapter needed).
    - Build command `pnpm build`, output `dist` (the defaults); Node.js 22.
    - Environment variables: `PUBLIC_PHOTO_BASE_URL=<Spaces CDN URL from § 3>`; `SITE_URL=https://photos.canellariccardo.it`.
-   - `vercel.json` already holds the 89 redirects (old Adobe URLs, `trailingSlash`, cache headers for `/film` and `/og`).
-     Regenerate the redirects with `pnpm redirects` after editing `redirects.csv`.
+   - `vercel.json` already holds the redirects (89 old URLs in both slash forms, `/sitemap.xml`), `trailingSlash`, the security headers and
+     the cache rules (`/_astro`, `/film`, `/og`). Regenerate the redirects with `pnpm redirects` after editing `redirects.csv`, and the headers
+     with `pnpm headers` after changing `PUBLIC_PHOTO_BASE_URL` or the inline script in `Base.astro`.
+   - Also set `PUBLIC_PHOTO_CORS=1` once the bucket sends CORS headers (§ 3 step 3).
 3. Check the `*.vercel.app` URL (this is the **test deploy**: do the checklist in § 6 there). Every push to a branch also gets a preview URL.
    On the preview, `SITE_URL` keeps canonical/OG pointing at the final address: that's expected.
 4. Add the custom domain `photos.canellariccardo.it` to the Vercel project **only when ready to switch**.
@@ -149,7 +164,10 @@ Ordered by importance. Items marked ★ are blockers.
 - [ ] A shooting page: envelope opens, negatives sheet, prints, lightbox, next envelope, back link returns to `/#slug`
 - [ ] Archive lists the right shootings; Contact has real details
 - [ ] Mobile (real phone), Safari, Firefox
-- [ ] Old URLs redirect (try 10 from `redirects.csv`)
+- [ ] Old URLs redirect, with **and** without the trailing slash, in one hop (try 10 from `redirects.csv`, the 4 old section URLs and `/sitemap.xml`):
+      `curl -sI https://<preview>/alice-bw | head -3` and `curl -sI https://<preview>/alice-bw/ | head -3` → `301`/`308` to `/models/alice-bw/`
+- [ ] Response headers: `curl -sI https://<preview>/ | grep -iE 'content-security|x-frame|nosniff|referrer'`; `curl -sI https://<preview>/_astro/<any file>` and `/film/...` → `cache-control: ... immutable`
+- [ ] Browser console on home, a shooting page and the lightbox: no `Content-Security-Policy-Report-Only` violations (see below)
 - [ ] `robots.txt`, `sitemap.xml`, 404 page, OG preview (paste a link in WhatsApp/Slack)
 - [ ] Sitemap lists every shooting (Erotics included) and not the 404; OG preview of an Erotics page shows the blank frame (paste a link in WhatsApp/Slack)
 - [ ] Lighthouse: Performance ≥ 90 on the shooting page, ≥ 80 on home (desktop); no CLS
@@ -172,3 +190,27 @@ Ordered by importance. Items marked ★ are blockers.
 3. § 5 deploy to `vercel.app`
 4. § 4 items 1–5 (Phases 4–5, 404, SEO, redirects) — this is where most of the remaining work is
 5. § 6 checklist → § 7 switch
+
+---
+
+## 8. Security headers and the CSP
+
+`vercel.json` sets, on every response: `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
+`X-Frame-Options: DENY`, `Permissions-Policy` (camera, microphone, geolocation, payment off) and a **`Content-Security-Policy-Report-Only`**.
+Generated by `pnpm headers` (`tools/lib/headers.mjs`); `pnpm check` fails if it drifts.
+
+The policy: everything from `'self'`; scripts `'self'` plus the sha256 of the one inline script in `Base.astro` (the rest are bundled files);
+styles `'self' 'unsafe-inline'` (inline `style=` attributes and the runtime paper/kraft textures set as CSS variables); images `'self' data: blob:`
+and the photo CDN; `connect-src` `'self'` and the photo CDN (the darkroom's `fetch` of the large print); no `object`, no framing.
+The CDN origin comes from `PUBLIC_PHOTO_BASE_URL` (env, else `.env.example`), so change that variable → run `pnpm headers` → commit.
+If you edit the inline script in `Base.astro` the hash changes: run `pnpm headers` again (`pnpm check` tells you).
+
+**Why Report-Only first:** a too-strict CSP breaks things silently (a texture, the darkroom). On the `vercel.app` preview, open the home,
+play the darkroom, open a shooting page and the lightbox with the console open; violations are logged there. When it is clean, rename the
+header key to `Content-Security-Policy` in `tools/lib/headers.mjs`, run `pnpm headers`, and redeploy.
+
+## 9. Content notes
+
+The 85 `note:` lines in `src/content/shooting/*/index.md` are authored copy (written at Riccardo's request); they appear in the envelope's
+Notes field and in each page's meta description. The code never generates notes, stock or titles. Review them like any other text before launch.
+Any shooting can be pulled from search engines and the sitemap, without deleting its page, with `noindex: true` in its frontmatter.

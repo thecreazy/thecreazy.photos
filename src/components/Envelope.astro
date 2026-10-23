@@ -2,19 +2,19 @@
 import { t } from '../i18n/en';
 import type { Shooting } from '../lib/shooting';
 
-interface Props { shooting: Shooting; number: number }
-const { shooting: s, number } = Astro.props;
+interface Props { shooting: Shooting; number: number; decorative?: boolean }
+const { shooting: s, number, decorative = false } = Astro.props;
 const no = String(number).padStart(3, '0');
 const e = t.envelope;
 ---
-<div class="env-front">
+<div class="env-front" aria-hidden={decorative ? 'true' : undefined}>
   <div class="f-head"><span>{e.lab}</span><b>{e.mark}</b></div>
   <div class="f-sub">{e.tagline}</div>
   <div class="f-no">{e.number} <i>{no}</i></div>
   <div class="f-row"><span>{e.subject}</span><i>{s.name}</i></div>
-  <div class="f-row"><span>{e.title}</span><i>{s.title ?? '—'}</i></div>
+  <div class="f-row"><span>{e.title}</span><i>{s.title ?? e.empty}</i></div>
   <div class="f-row"><span>{e.date}</span><i>{s.date}</i></div>
-  <div class="f-row"><span>{e.film}</span><i>{s.stockLabel ?? '—'}</i></div>
+  <div class="f-row"><span>{e.film}</span><i>{s.stockLabel ?? e.empty}</i></div>
   <div class="f-row"><span>{e.format}</span><i>{e.frames(s.photos.length)}</i></div>
   <div class="f-checks">
     {e.checks.map((c, i) => <label><b>{i === 0 || i === 2 ? '✗' : ''}</b>{c}</label>)}

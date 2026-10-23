@@ -1,10 +1,12 @@
 /* Ported from reference/rullino.html (lines 14–42, 49–53, mobile rules). */
-html.home,body.home{height:100%;overflow:hidden}
+html.home.gl,html.home.gl body.home{height:100%;overflow:hidden}
+html.home.js:not(.gl):not(.nogl),html.home.js:not(.gl):not(.nogl) body.home{height:100%;overflow:hidden} /* while the roll boots */
+html.nogl #loader,html.nogl #gl,html.nogl #title,html.nogl #meta,html.nogl #timeline,html.nogl #hint,html.nogl #vig,html.nogl #grain,html.nogl #darkroom{display:none} /* no WebGL: the plain list takes over */
 #gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%)}
 #fade{position:fixed;inset:0;z-index:4;background:#0b0908;opacity:0;pointer-events:none;transition:opacity .25s}
 #fade.on{opacity:1}
-#grain{position:fixed;inset:-50%;pointer-events:none;opacity:.09;mix-blend-mode:overlay;animation:grain .5s steps(4) infinite}
+#grain{position:fixed;inset:-12%;pointer-events:none;opacity:.09;mix-blend-mode:overlay;animation:grain .5s steps(4) infinite}
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(1%,3%)}}
 
 #brand{position:fixed;top:22px;left:26px;z-index:3;font:400 24px/1 var(--serif);cursor:pointer}
@@ -28,12 +30,14 @@ html.home,body.home{height:100%;overflow:hidden}
 #timeline i.on{background:rgba(239,231,218,.75);height:6px}
 #timeline i:hover{background:rgba(239,231,218,.45)}
 #tlMark{position:absolute;top:0;width:1.5px;height:18px;background:var(--red);pointer-events:none;transition:left .12s linear}
-#hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(239,231,218,.38);font-size:11px;white-space:nowrap;pointer-events:none}
+#hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(239,231,218,.6);font-size:11px;white-space:nowrap;pointer-events:none}
 #loader{position:fixed;inset:0;z-index:9;background:#0b0908;display:grid;place-content:center;gap:16px;text-align:center;transition:opacity .8s}
 #loader div:first-child{font:italic 400 30px var(--serif)}
 #loader.done{opacity:0;pointer-events:none}
 #bar{width:220px;height:1px;background:#2b2622;margin:auto}
 #bar i{display:block;height:100%;width:0;background:var(--red);transition:width .15s}
+@media (pointer:coarse){#grain{mix-blend-mode:normal;opacity:.05}} /* no blend pass on phones */
+@media (prefers-reduced-motion:reduce){#grain{animation:none}}
 /* desktop vs touch wording */
 .h-t{display:none}
 @media (pointer:coarse){.h-d{display:none}.h-t{display:inline}}
@@ -67,7 +71,7 @@ html:not(.js) #gl,html:not(.js) #loader,html:not(.js) #vig,html:not(.js) #grain{
 #darkroom.on{opacity:1;pointer-events:auto;cursor:pointer}
 #drgl{position:absolute;inset:0;width:100%;height:100%;display:block}
 #dial{position:absolute;right:28px;bottom:26px;width:92px;height:92px;opacity:.9;transition:opacity .4s}
-#drCap{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);color:#ff8a70;font:italic 400 18px var(--serif);opacity:.55;white-space:nowrap;transition:opacity .3s}
+#drCap{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);color:#ff8a70;font:italic 400 18px var(--serif);opacity:.8;white-space:nowrap;transition:opacity .3s}
 #darkroom.lit #drCap,#darkroom.lit #dial{opacity:0}
 html:not(.js) #darkroom{display:none}
 @media (max-width:760px){#dial{right:16px;bottom:16px;width:64px;height:64px}}

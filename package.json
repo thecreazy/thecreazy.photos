@@ -7,14 +7,20 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node tools/check.mjs",
     "build": "astro build",
+    "check": "node tools/check.mjs",
+    "typecheck": "tsc --noEmit",
     "preview": "astro preview",
     "astro": "astro",
     "foto": "tsx tools/foto.mjs",
     "masters": "tsx tools/fetch-masters.mjs",
     "redirects": "node tools/redirects.mjs",
+    "headers": "node tools/headers.mjs",
+    "hashnames": "node tools/hashnames.mjs",
     "favicon": "node tools/favicon.mjs",
-    "upload": "rclone copy public/photos canellariccardo:photos-riccardo --s3-acl public-read --s3-no-check-bucket --progress",
+    "textures": "tsx tools/textures.mjs",
+    "upload": "rclone copy public/photos canellariccardo:photos-riccardo --s3-acl public-read --s3-no-check-bucket --header-upload \"Cache-Control: public, max-age=31536000, immutable\" --progress",
     "migrate": "tsx tools/migrate.mjs"
   },
   "dependencies": {

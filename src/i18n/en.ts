@@ -8,7 +8,7 @@ export const t = {
     travels: 'Travels',
     erotic: 'Erotics',
   },
-  nav: { archive: 'Archive', contact: 'Contact' },
+  nav: { archive: 'Archive', contact: 'Contact', sections: 'Sections' },
   home: {
     loading: 'loading the roll…',
     endHead: 'END',
@@ -23,6 +23,7 @@ export const t = {
     developing: 'developing · click to skip',
     developingTouch: 'developing · tap to skip',
     shoots: 'shoots',
+    stockFallback: '35 mm',
   },
   stock: { bw: 'B&W', color: 'COLOR' },
   envelope: {
@@ -39,6 +40,7 @@ export const t = {
     frames: (n: number) => `35 mm · ${n} ${n === 1 ? 'frame' : 'frames'}`,
     checks: ['contact', '10×15', '18×24', '30×40'],
     developed: 'DEVELOPED',
+    empty: '—',
   },
   project: {
     back: '← roll',
@@ -52,6 +54,8 @@ export const t = {
     next: 'next envelope',
     marginNo: 'no.',
     alt: (name: string, i: number) => `${name}, frame ${i}`,
+    negativesSheet: (n: number) => `Negatives sheet, ${n} ${n === 1 ? 'frame' : 'frames'}`,
+    lightbox: { label: 'Photo viewer', close: 'Close', prev: 'Previous photo', next: 'Next photo' },
   },
   archive: { title: 'Archive', sub: 'every roll', count: (n: number) => `archive · ${n} shoots`, photos: (n: number) => `${n} photos` },
   og: {
@@ -62,6 +66,7 @@ export const t = {
     home: 'Photography by Riccardo Canella: portraits, projects and travels, as a roll of film and a lab envelope for every shoot.',
     archive: 'Every roll: the full list of shoots by Riccardo Canella, by section.',
     contact: 'Get in touch with Riccardo Canella for a portrait, a project or a coffee.',
+    shooting: (title: string, section: string, date: string, note?: string) => `${title} — ${section}, ${date}.${note ? ` ${note}` : ''}`,
   },
   notFound: {
     code: '404',

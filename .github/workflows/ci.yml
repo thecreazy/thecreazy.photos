@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://photos.canellariccardo.it
+      PUBLIC_PHOTO_BASE_URL: https://photos-riccardo.fra1.cdn.digitaloceanspaces.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # version from "packageManager" in package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check --strict
+      - run: pnpm typecheck
+      - run: pnpm build # also runs `pnpm check` (prebuild)

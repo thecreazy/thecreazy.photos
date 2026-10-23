@@ -16,6 +16,8 @@ export function makeRolls(data: RollData[]): Roll[] {
     mask: d.bw ? [0.86, 0.86, 0.84] : [1, 0.64, 0.4],
     imgs: new Map(),
     loading: false,
+    tries: new Map(),
+    retryAt: 0,
   }));
 }
 
@@ -80,22 +82,35 @@ function release(seg: Seg) {
   u.map.value = blank(); u.tMarks.value = blank();
 }
 
+const MAX_TRIES = 3; // per frame, then it stays fogged
+const BITMAP_PX = 420; // long side of the stored bitmap: the frame is painted at 252×168 px, so this is still ~1.7× oversampled
+
 async function loadImages(seg: Seg) {
   const roll = seg.roll;
-  if (!roll || roll.loading) return;
-  const todo = roll.shown.filter((fi) => !roll.imgs.has(fi));
+  if (!roll || roll.loading || performance.now() < roll.retryAt) return;
+  const todo = roll.shown.filter((fi) => !roll.imgs.has(fi) && (roll.tries.get(fi) ?? 0) < MAX_TRIES);
   if (!todo.length) return;
   roll.loading = true;
+  let got = 0, failed = 0;
   await Promise.all(todo.map(async (fi) => {
-    const url = roll.film[roll.shown.indexOf(fi)];
+    const k = roll.shown.indexOf(fi);
     try {
-      const r = await fetch(url);
-      if (!r.ok) return;
-      roll.imgs.set(fi, await createImageBitmap(await r.blob(), { resizeWidth: 500, resizeQuality: 'high' }));
-    } catch { /* leave the frame fogged */ }
+      const r = await fetch(roll.film[k]);
+      if (!r.ok) throw new Error(String(r.status));
+      const size = roll.port[k] ? { resizeHeight: BITMAP_PX } : { resizeWidth: BITMAP_PX };
+      roll.imgs.set(fi, await createImageBitmap(await r.blob(), { ...size, resizeQuality: 'high' }));
+      got++;
+    } catch { roll.tries.set(fi, (roll.tries.get(fi) ?? 0) + 1); failed++; } // leave the frame fogged, retry a couple of times
   }));
   roll.loading = false;
-  redraw(seg);
+  if (failed) roll.retryAt = performance.now() + 2000 * 2 ** Math.max(...[...roll.tries.values()], 1);
+  if (got) redraw(seg); // nothing new → nothing to repaint
+}
+
+function dropImages(roll: Roll) {
+  if (!roll.imgs.size) return;
+  for (const b of roll.imgs.values()) b.close();
+  roll.imgs.clear();
 }
 
 /** Called every frame: activate segments near the light, release the far ones. */
@@ -105,5 +120,6 @@ export function updateActive(segs: Seg[], scroll: number) {
     if (d < LOAD_MM && s.roll) void loadImages(s);
     if (d < ACTIVE_MM && !s.active) { s.active = true; redraw(s); }
     else if (d > ACTIVE_MM * 2.2 && s.active) release(s);
+    if (d > LOAD_MM * 2 && !s.active && s.roll && !s.roll.loading) dropImages(s.roll); // far away: free the decoded frames
   }
 }

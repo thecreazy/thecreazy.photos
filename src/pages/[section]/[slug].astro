@@ -15,7 +15,7 @@ export const getStaticPaths = (async () => {
     const at = (d: number) => inSection[(k + d + inSection.length) % inSection.length];
     return {
       params: { section: s.section, slug: s.slug },
-      props: { shooting: s, number: 100 + n, k, total: inSection.length, prev: at(-1), next: at(1), nextNumber: 100 + all.indexOf(at(1)) },
+      props: { shooting: s, number: s.envelope ?? 100 + n, k, total: inSection.length, prev: at(-1), next: at(1), nextNumber: at(1).envelope ?? 100 + all.indexOf(at(1)) },
     };
   });
 }) satisfies GetStaticPaths;
@@ -37,39 +37,41 @@ for (let i = 0, p = 0; i < others.length; p++) {
   i += take;
 }
 ---
-<Base title={title} description={`${title} — ${t.sections[s.section]}, ${s.date}.${s.note ? ` ${s.note}` : ''}`} image={`/og/${s.slug}.jpg`} imageAlt={`${title} — ${t.sections[s.section]}`} bodyClass="project">
+<Base title={title} description={t.meta.shooting(title, t.sections[s.section], s.date, s.note)} noindex={s.noindex} image={`/og/${s.slug}.jpg`} imageAlt={`${title} — ${t.sections[s.section]}`} bodyClass="project">
   <div class="b-bg"></div>
   <div class="pt">
     <a href={`/#${s.slug}`} data-back>{t.project.back}</a>
     <span class="sw">{t.sections[s.section]} · {pad(k + 1)}/{pad(total)}</span>
   </div>
 
+  <main>
+  <h1 class="sr-only">{title}</h1>
   <section class="b-hero" data-hero>
     <div class="b-stage">
       <div class="env">
         <div class="env-back"></div>
-        <PrintFigure shooting={s} index={heroIdx} class="hero" eager />
+        <PrintFigure shooting={s} index={heroIdx} class="hero" kind="hero" eager />
         <Envelope shooting={s} number={number} />
         <div class="env-flap"><div class="fo"></div><div class="fi"></div></div>
       </div>
       <div class="b-hint">{t.project.hint}</div>
     </div>
   </section>
-  <noscript><div class="print-hero-static"><PrintFigure shooting={s} index={heroIdx} eager /></div></noscript>
+  <noscript><div class="print-hero-static"><PrintFigure shooting={s} index={heroIdx} kind="hero" eager /></div></noscript>
 
   <section class="b-neg" id="negatives" data-slug={s.slug} data-bw={String(!!s.bw)}
     data-selected={JSON.stringify(s.selected.map((i) => i - 1))}
     data-film={JSON.stringify(s.photos.map((f) => filmUrl(s.slug, f)))}>
-    <div class="b-label"><span>{t.project.negatives}</span><small><span class="h-d">{t.project.negativesHint}</span><span class="h-t">{t.project.negativesHintTouch}</span></small></div>
-    <div class="sleeve" id="sleeve"></div>
+    <div class="b-label"><h2>{t.project.negatives}</h2><small><span class="h-d">{t.project.negativesHint}</span><span class="h-t">{t.project.negativesHintTouch}</span></small></div>
+    <div class="sleeve" id="sleeve" role="img" aria-label={t.project.negativesSheet(s.photos.length)}></div>
   </section>
 
   <section class="b-prints" id="bprints">
-    <div class="b-label"><span>{t.project.prints}</span><small>{t.project.frames(s.photos.length)}</small></div>
+    <div class="b-label"><h2>{t.project.prints}</h2><small>{t.project.frames(s.photos.length)}</small></div>
     {rows.map((row) => (
       <div class={`row ${row.kind}`}>
         {row.kind === 'side' && <div class="margin">{t.project.marginNo} {row.items[0]}<i>⟶</i></div>}
-        {row.items.map((i) => <PrintFigure shooting={s} index={i} />)}
+        {row.items.map((i) => <PrintFigure shooting={s} index={i} kind={row.kind} />)}
       </div>
     ))}
   </section>
@@ -77,14 +79,16 @@ for (let i = 0, p = 0; i < others.length; p++) {
   {total > 1 && (
     <section class="b-end">
       <a class="b-prev" href={href(prev)}>{t.project.previous} · {prev.name}</a>
-      <a class="next-env" href={href(next)} data-next aria-label={`${t.project.next}: ${next.name}`}>
+      <a class="next-env" href={href(next)} data-next>
+        <span class="sr-only">{t.project.next}: {next.name}</span>
         <div class="env-back"></div>
-        <Envelope shooting={next} number={nextNumber} />
+        <Envelope shooting={next} number={nextNumber} decorative />
         <div class="env-flap"><div class="fo"></div></div>
       </a>
       <div class="b-nextlab">{t.project.next}</div>
     </section>
   )}
+  </main>
 
   <script>
     import '../../scripts/project/main';

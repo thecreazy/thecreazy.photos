@@ -34,12 +34,19 @@ export function buildTimeline() {
     i.style.flex = String(seg.len);
     if (lastZ && seg.zone!.id !== lastZ) i.className = 'sec';
     lastZ = seg.zone!.id; i.title = seg.roll!.name;
-    i.onclick = (e) => { e.stopPropagation(); jumpTo(S.stops.find((s) => s.seg === seg)); };
+    i.setAttribute('role', 'button'); i.tabIndex = 0; i.setAttribute('aria-label', seg.roll!.name);
+    const go = () => jumpTo(S.stops.find((s) => s.seg === seg));
+    i.onclick = (e) => { e.stopPropagation(); go(); };
+    i.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
     seg.tl = i; tl.append(i);
   }
 }
 
+// the timeline's boxes only move on resize: measure once, not every frame
+let tlRect: DOMRect | null = null, markSeg: unknown = null, markRect: DOMRect | null = null;
+
 export function layoutHUD() {
+  tlRect = markRect = null;
   const visH = 2 * S.CAMZ * Math.tan(MathUtils.degToRad(S.camera.fov / 2)), px = (S.H / visH) * STRIP_H;
   // vertical roll: title and data sit in the free bands at the top and bottom (see html.vert in home.css)
   $('title').style.bottom = S.vertical ? '' : S.H / 2 + px / 2 + 34 + 'px';
@@ -69,12 +76,14 @@ export function updateHUD() {
     S.cur = st;
     if (seg.roll) {
       const r = seg.roll;
-      $('meta').innerHTML = `<b>${esc(r.stock ?? '35 mm')}</b>${r.date ? ' · ' + esc(r.date) : ''} · ${t.home.frame} <b>${st.fi + 1}</b>/${r.n} · <span class="sel">${t.home.picked}</span>`;
+      $('meta').innerHTML = `<b>${esc(r.stock ?? t.home.stockFallback)}</b>${r.date ? ' · ' + esc(r.date) : ''} · ${t.home.frame} <b>${st.fi + 1}</b>/${r.n} · <span class="sel">${t.home.picked}</span>`;
     } else $('meta').innerHTML = t.home.toContact;
   }
-  const rect = $('timeline').getBoundingClientRect(), el = seg.tl;
+  const el = seg.tl;
   if (el) {
-    const r2 = el.getBoundingClientRect(), f = Math.min(1, Math.max(0, (S.scroll - seg.x0) / seg.len));
+    if (!tlRect) tlRect = $('timeline').getBoundingClientRect();
+    if (markSeg !== seg || !markRect) { markSeg = seg; markRect = el.getBoundingClientRect(); }
+    const rect = tlRect, r2 = markRect, f = Math.min(1, Math.max(0, (S.scroll - seg.x0) / seg.len));
     $('tlMark').style.left = r2.left - rect.left + f * r2.width + 'px';
   }
 }

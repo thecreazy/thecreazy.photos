@@ -8,14 +8,14 @@ import { t } from '../i18n/en';
 const all = await getShootings();
 ---
 <Base title={t.archive.title} description={t.meta.archive} bodyClass="paper">
-  <div class="pg">
+  <main class="pg">
     <div class="pg-top"><a href="/">{t.project.back}</a><span>{t.archive.count(all.length)}</span></div>
     <h1>{t.archive.title}<em>{t.archive.sub}</em></h1>
     {SECTIONS.map((sec) => {
       const rs = all.filter((s) => s.section === sec);
       return rs.length > 0 && (
         <>
-          <h3>{t.sections[sec]} <small>{rs.length}</small></h3>
+          <h2>{t.sections[sec]} <small>{rs.length}</small></h2>
           <div class="arch">
             {rs.map((s) => (
               <a href={`/${s.section}/${s.slug}/`}>
@@ -27,5 +27,5 @@ const all = await getShootings();
         </>
       );
     })}
-  </div>
+  </main>
 </Base>

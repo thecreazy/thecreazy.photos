@@ -1,28 +1,39 @@
 ---
-import '@fontsource/instrument-serif/400.css';
-import '@fontsource/instrument-serif/400-italic.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
-import '@fontsource/covered-by-your-grace/400.css';
-import '@fontsource/nanum-pen-script/400.css';
+// latin subsets only: every name and caption on the site fits in them (checked by tools/check.mjs), and the full
+// per-family CSS pulled in 20+ unicode-range faces that blocked rendering
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '@fontsource/covered-by-your-grace/latin-400.css';
+import '@fontsource/nanum-pen-script/latin-400.css';
+import serifFont from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
+import monoFont from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
 import '../styles/tokens.css';
 import { t } from '../i18n/en';
 
 interface Props { title?: string; description?: string; noindex?: boolean; bodyClass?: string; htmlClass?: string; image?: string; imageAlt?: string }
 const { title, description, noindex = false, bodyClass, htmlClass, image = '/og/site.jpg', imageAlt = `${t.brand} — ${t.brandSub}` } = Astro.props;
-const full = title ? `${title} — ${t.brand}` : `${t.brand} — Photography`;
+const full = title ? `${title} — ${t.brand}` : `${t.brand} — ${t.brandSub}`;
 const site = Astro.site ?? new URL('https://photos.canellariccardo.it');
 const canonical = new URL(Astro.url.pathname, site).href;
 const imageUrl = new URL(image, site).href;
+const adult = Astro.url.pathname.startsWith('/erotic/'); // not a gate: lets SafeSearch / parental filters classify the page
+const light = bodyClass?.split(' ').includes('paper'); // Archive and Contact are the light pages
 ---
 <!doctype html>
 <html lang="en" class={htmlClass}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content={light ? '#f4efe6' : '#0b0908'} />
+    <meta name="color-scheme" content={light ? 'light' : 'dark'} />
+    <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={monoFont} as="font" type="font/woff2" crossorigin />
     <title>{full}</title>
     {description && <meta name="description" content={description} />}
     {noindex ? <meta name="robots" content="noindex,nofollow" /> : <link rel="canonical" href={canonical} />}
+    {adult && <meta name="rating" content="adult" />}
     <meta property="og:site_name" content={t.brand} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
@@ -40,6 +51,7 @@ const imageUrl = new URL(image, site).href;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {/* keep this script byte-identical to the sha256 in vercel.json's Content-Security-Policy-Report-Only (tools/check.mjs verifies it) */}
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
   <body class={bodyClass}><slot /></body>

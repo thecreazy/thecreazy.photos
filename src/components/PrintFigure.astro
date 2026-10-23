@@ -1,16 +1,25 @@
 ---
-import { photoUrl, WIDTHS, type Shooting } from '../lib/shooting';
+import { blurStyle, photoUrl, WIDTHS, type Shooting } from '../lib/shooting';
 import { rng, hashStr } from '../lib/rng';
 import { t } from '../i18n/en';
 
-interface Props { shooting: Shooting; index: number; class?: string; eager?: boolean }
-const { shooting: s, index, class: cls = '', eager = false } = Astro.props;
+type Kind = 'hero' | 'big' | 'pair' | 'side';
+interface Props { shooting: Shooting; index: number; class?: string; eager?: boolean; kind?: Kind }
+const { shooting: s, index, class: cls = '', eager = false, kind = 'big' } = Astro.props;
 const file = s.photos[index - 1];
 const m = s.meta[file];
 const seed = hashStr(s.slug) % 100;
 const rot = ((rng(seed + index * 13)() - 0.5) * 2.6).toFixed(2);
 const depth = (0.03 + rng(seed + index * 5)() * 0.09).toFixed(3);
-const sizes = '(max-width: 760px) 86vw, 68vw';
+
+// rendered width per row kind and orientation (project.css) in % of a column of at most COL px; 86% of the padded viewport on phones
+const COL = 1132;
+const share = { big: [68, 44], pair: [42, 31], side: [40, 28] } as const;
+const [land, port] = share[kind === 'hero' ? 'big' : kind];
+const pct = m?.portrait ? port : land;
+const sizes = kind === 'hero'
+  ? '(max-width: 760px) 86vw, min(86vw, 1180px)' // the hero is scaled up as it leaves the envelope
+  : `(max-width: 760px) calc((100vw - 48px) * .86), min(${Math.round((COL * pct) / 100)}px, ${pct}vw)`;
 const set = (ext: 'avif' | 'webp') => WIDTHS.map((w) => `${photoUrl(s.slug, file, w, ext)} ${w}w`).join(', ');
 ---
 <figure
@@ -27,9 +36,11 @@ const set = (ext: 'avif' | 'webp') => WIDTHS.map((w) => `${photoUrl(s.slug, file
       src={photoUrl(s.slug, file, 1400, 'webp')}
       width={m?.w ?? 3}
       height={m?.h ?? 2}
-      alt={t.project.alt(s.name, index)}
+      alt={s.alts?.[file] ?? t.project.alt(s.name, index)}
       loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
       decoding="async"
+      style={await blurStyle(s.slug, file)}
     />
   </picture>
 </figure>

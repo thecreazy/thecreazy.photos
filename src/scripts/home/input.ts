@@ -45,8 +45,15 @@ export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
     if (Math.abs(p.stop.x - S.scroll) < 8) hooks.open(roll, p.stop.fi); else goTo(p.stop);
   };
 
-  canvas.addEventListener('wheel', (e) => { e.preventDefault(); if (!S.busy) nudge((Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * 0.32); }, { passive: false });
+  canvas.addEventListener('wheel', (e) => {
+    if (e.ctrlKey) return; // pinch / ctrl+wheel zoom stays the browser's
+    e.preventDefault();
+    if (S.busy) return;
+    const k = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? S.H : 1; // Firefox reports notched wheels in lines
+    nudge((Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * k * 0.32);
+  }, { passive: false });
   canvas.addEventListener('pointerdown', (e) => {
+    if (e.button) return; // primary button / touch only
     S.mx = e.clientX; S.my = e.clientY; S.inside = true;
     S.drag = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, moved: false };
     canvas.setPointerCapture(e.pointerId);
@@ -61,10 +68,12 @@ export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
       d.lx = e.clientX; d.ly = e.clientY;
     }
   });
+  canvas.addEventListener('pointercancel', () => { S.drag = null; });
   canvas.addEventListener('pointerup', () => { if (S.drag && !S.drag.moved) click(); S.drag = null; });
   canvas.addEventListener('pointerleave', () => { S.inside = false; });
   addEventListener('keydown', (e) => {
-    if (S.busy) return;
+    if (S.busy || e.repeat || e.altKey || e.ctrlKey || e.metaKey) return;
+    if ((e.target as HTMLElement | null)?.closest?.('a, button, input, select, textarea, [role="button"]')) return; // keys belong to the focused control
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') step(1);
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') step(-1);
     if (e.key === 'Enter' && S.cur && S.cur.fi >= 0) {

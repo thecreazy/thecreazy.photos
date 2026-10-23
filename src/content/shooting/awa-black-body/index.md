@@ -5,7 +5,7 @@ date: "2022"
 section: models
 # stock:
 # bw:
-home: true
+home: false
 order: 133
 selected: [13, 22, 7]
 # hero: 1

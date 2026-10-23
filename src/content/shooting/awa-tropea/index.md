@@ -5,7 +5,7 @@ date: "2021"
 section: models
 # stock:
 # bw:
-home: true
+home: false
 order: 148
 selected: [33, 9, 17]
 # hero: 1
