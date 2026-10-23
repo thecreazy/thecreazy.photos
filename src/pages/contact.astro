@@ -1,19 +1,68 @@
 ---
 import '../styles/pages.css';
+import '../styles/project.css';
 import Base from '../layouts/Base.astro';
+import SelfPortrait from '../components/SelfPortrait.astro';
+import { SITE_FRAMES } from '../config';
+import { filmUrl, getShootings } from '../lib/shooting';
 import { t } from '../i18n/en';
 
-const { email, instagram, place, statement } = t.contact;
+const { email, instagram, place, statement, labels, order, stamp, title } = t.contact;
+const all = await getShootings();
+const frames = SITE_FRAMES.flatMap(([slug, n]) => {
+  const s = all.find((x) => x.slug === slug), file = s?.photos[n - 1];
+  return s && file ? [{ href: `/${s.section}/${s.slug}/`, src: filmUrl(s.slug, file), label: `${s.name}${s.title ? ` — ${s.title}` : ''}` }] : [];
+});
+const insta = instagram && `https://instagram.com/${instagram.replace('@', '')}`;
 ---
-<Base person title={t.nav.contact} description={t.meta.contact} bodyClass="paper">
-  <main class="pg">
-    <div class="pg-top"><a href="/">{t.project.back}</a><span>{t.nav.contact.toLowerCase()}</span></div>
-    <h1>{t.contact.title}<em>{t.contact.sub}</em></h1>
-    <p class="statement">{statement}</p>
-    <div class="contact">
-      {email && <a href={`mailto:${email}`}>{email}</a>}{email && <br />}
-      {instagram && <a href={`https://instagram.com/${instagram.replace('@', '')}`}>{instagram}</a>}
-      {place && <span>{place}</span>}
-    </div>
+<Base person title={t.nav.contact} description={t.meta.contact} bodyClass="project ct">
+  <div class="b-bg"></div>
+  <div class="pt">
+    <a href="/" data-back>{t.project.back}</a>
+    <span class="sw">{t.nav.contact}</span>
+  </div>
+
+  <main>
+    <h1 class="sr-only">{title}</h1>
+    <section class="b-hero" data-hero>
+      <div class="b-stage">
+        <div class="env">
+          <div class="env-back"></div>
+          <figure class="print hero" style="--rot:-0.6deg"><SelfPortrait /></figure>
+          <div class="env-front">
+            <div class="f-head"><span>{t.envelope.lab}</span><b>{t.envelope.mark}</b></div>
+            <div class="f-sub">{t.envelope.tagline}</div>
+            {email && <div class="f-row"><span>{labels.to}</span><i><a href={`mailto:${email}`}>{email}</a></i></div>}
+            {instagram && <div class="f-row"><span>{labels.instagram}</span><i><a href={insta}>{instagram}</a></i></div>}
+            {place && <div class="f-row"><span>{labels.based}</span><i>{place}</i></div>}
+            <div class="f-row"><span>{labels.order}</span><i>{order}</i></div>
+            <p class="ct-quote">{statement}</p>
+            <div class="stamp">{stamp}</div>
+          </div>
+          <div class="env-flap"><div class="fo"></div><div class="fi"></div></div>
+        </div>
+        <div class="b-hint">{t.project.hint}</div>
+      </div>
+    </section>
+    <noscript><div class="print-hero-static"><figure class="print"><SelfPortrait /></figure></div></noscript>
+
+    <section class="ct-after">
+      <h2>{title}</h2>
+      <p class="statement">{statement}</p>
+      <div class="ct-links">
+        {email && <a href={`mailto:${email}`}>{email}</a>}
+        {instagram && <a href={insta}>{instagram}</a>}
+        {place && <span>{place}</span>}
+      </div>
+      {frames.length > 0 && (
+        <nav class="ct-strip" aria-label={t.contact.frames}>
+          {frames.map((f) => <a class="nf-frame" href={f.href} aria-label={f.label}><img src={f.src} alt="" loading="lazy" decoding="async" /></a>)}
+        </nav>
+      )}
+    </section>
   </main>
+
+  <script>
+    import '../scripts/project/contact';
+  </script>
 </Base>

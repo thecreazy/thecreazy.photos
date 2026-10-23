@@ -82,11 +82,16 @@ export const t = {
   contact: {
     title: 'Write to me',
     sub: 'for a portrait, a project, a coffee',
+    order: 'a portrait · a project · a coffee',
+    labels: { to: 'To', instagram: 'Instagram', based: 'Based in', order: 'Order' },
+    stamp: 'WRITE TO ME',
+    selfAlt: 'Self-portrait of Riccardo Canella in a mirror, camera in hand',
+    frames: 'a few frames from the roll',
     // a line left empty is hidden on the page
     // from the artist's own page on Oltre il Visibile (translated from Italian)
     statement: 'I photograph what is about to disappear: the moment before a person goes back to being only themselves.',
     email: 'canella_riccardo@icloud.com',
     instagram: '@thecrz',
-    place: 'Based in Milan, Italy',
+    place: 'Milan, Italy',
   },
 } as const;

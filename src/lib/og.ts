@@ -5,6 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import satori from 'satori';
 import sharp from 'sharp';
+import { SITE_FRAMES } from '../config';
 import { t } from '../i18n/en';
 import { filmPath, type Shooting } from './shooting';
 
@@ -90,7 +91,6 @@ export async function shootingOg(s: Shooting): Promise<Buffer> {
 }
 
 /** Frames (slug, 1-based photo number) fanned on the site-wide preview: safe, varied, from the work itself. */
-const SITE_FRAMES: [string, number][] = [['2025-new-york', 25], ['people-in-museums', 18], ['brutalism-in-skopje', 19]];
 
 export async function siteOg(all: Shooting[]): Promise<Buffer> {
   const frames = SITE_FRAMES.map(([slug, n]) => ({ slug, file: all.find((s) => s.slug === slug)?.photos[n - 1] })).filter((f) => f.file);

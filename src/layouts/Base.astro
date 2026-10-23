@@ -22,7 +22,7 @@ const adult = Astro.url.pathname.startsWith('/erotic/'); // not a gate: lets Saf
 const ld = person ? JSON.stringify({
   '@context': 'https://schema.org', '@type': 'Person', name: t.brand, url: site.href, jobTitle: t.person.job,
   description: t.contact.statement, image: imageUrl, sameAs: t.person.sameAs,
-  ...(t.contact.place && { homeLocation: { '@type': 'Place', name: 'Milan, Italy' } }),
+  ...(t.contact.place && { homeLocation: { '@type': 'Place', name: t.contact.place } }),
 }).replace(/</g, '\\u003c') : '';
 const light = bodyClass?.split(' ').includes('paper'); // Archive and Contact are the light pages
 ---

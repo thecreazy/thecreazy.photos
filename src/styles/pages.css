@@ -14,8 +14,8 @@
 .pg .arch .n em{color:var(--dim)}
 .pg .arch .n b{font:500 10px var(--mono);color:var(--red);vertical-align:middle;margin-left:6px}
 .pg .arch .d{font-size:11px;color:var(--dim);white-space:nowrap;letter-spacing:.06em}
-.pg .contact{font:400 clamp(28px,3.4vw,46px)/1.35 var(--serif);margin-top:50px}
-.pg .contact span{display:block;font:11px var(--mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:28px}
+
+
 body.paper{background:var(--paper);color:var(--ink)}
 @media (max-width:760px){.pg{padding:0 16px 80px}}
 
@@ -34,4 +34,25 @@ body.nf{background:var(--bg);color:var(--light)}
 .nf-links{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:6px!important}
 .nf-links a{color:var(--light);text-decoration:none;border-bottom:1px solid rgba(239,231,218,.3);padding-bottom:2px}
 .nf-links a:hover{color:var(--red);border-color:var(--red)}
-.pg .statement{font:italic 400 clamp(18px,1.8vw,24px)/1.45 var(--serif);color:var(--dim);max-width:34em;margin:26px 0 0}
+
+
+/* Contact: the same lab envelope as the shooting pages (the portrait comes out of it as you scroll), then the details and a strip of frames */
+body.ct .print{cursor:default}
+.ct .env-front i a{color:inherit;text-decoration:none;border-bottom:1.5px solid rgba(29,42,74,.45)}
+.ct .env-front i a:hover{color:var(--red);border-color:var(--red)}
+.ct .env-front .f-row{flex-wrap:wrap}
+.ct-quote{margin:calc(var(--u)*4) 0 0;max-width:70%;font:italic 400 calc(var(--u)*3.6)/1.4 var(--serif);letter-spacing:0;color:#5b2a20;text-transform:none}
+.ct-after{position:relative;display:grid;justify-items:center;gap:26px;padding:12vh 16px 120px;text-align:center}
+.ct-after h2{font:italic 400 clamp(36px,5vw,64px)/1 var(--serif);margin:0}
+.ct-after .statement{max-width:30em;margin:0;font:italic 400 clamp(18px,1.8vw,24px)/1.45 var(--serif);color:#b3a899}
+.ct-links{display:grid;gap:6px;font:400 clamp(28px,3.6vw,48px)/1.3 var(--serif)}
+.ct-links a{color:#efe7da;text-decoration:none;border-bottom:1px solid rgba(239,231,218,.3)}
+.ct-links a:hover{color:#ff6b5a;border-color:#ff6b5a}
+.ct-links span{font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#948a7e;margin-top:8px}
+.ct-strip{position:relative;display:flex;gap:2.2%;width:min(900px,92vw);padding:34px 3%;margin-top:30px;background:#7a4524;border-radius:2px;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.ct-strip::before,.ct-strip::after{content:'';position:absolute;left:0;right:0;height:11px;background:repeating-linear-gradient(90deg,transparent 0 9px,#f1ece1 9px 21px,transparent 21px 30px);opacity:.92}
+.ct-strip::before{top:11px}
+.ct-strip::after{bottom:11px}
+.ct-strip .nf-frame{display:block;overflow:hidden;position:relative}
+.ct-strip img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.9);transition:transform .5s,filter .3s}
+.ct-strip a:hover img{transform:scale(1.04);filter:none}
