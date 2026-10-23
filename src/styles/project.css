@@ -31,7 +31,7 @@ html.js .b-prints .print:not(.laid){--in:0;box-shadow:0 40px 90px -20px rgba(0,0
 .b-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;perspective:1600px}
 .env{position:absolute;left:50%;top:50%;margin:0;translate:-50% -50%;perspective:1400px}
 .env-back,.env-front{position:absolute;inset:0;border-radius:4px}
-.env-back{background:#a8845a var(--t-kraft);background-size:600px;filter:brightness(.72);box-shadow:0 50px 90px -30px rgba(0,0,0,.75),0 10px 24px -8px rgba(0,0,0,.5)}
+.env-back{background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),#a8845a var(--t-kraft);background-size:auto,600px;box-shadow:0 50px 90px -30px rgba(0,0,0,.75),0 10px 24px -8px rgba(0,0,0,.5)}
 .env-front{background:#b58f63 var(--t-kraft);background-size:600px;z-index:3;padding:calc(var(--u)*12) calc(var(--u)*7) calc(var(--u)*6);color:#8e2b20;font-family:var(--mono);font-size:calc(var(--u)*2.6);letter-spacing:.08em}
 .env-front::before{content:'';position:absolute;left:0;right:0;top:0;height:calc(var(--u)*1.4);background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,0))}
 .env .print.hero{position:absolute;z-index:2;transform-origin:50% 50%;will-change:transform}
@@ -39,8 +39,8 @@ html.js .b-prints .print:not(.laid){--in:0;box-shadow:0 40px 90px -20px rgba(0,0
 .env-flap{position:absolute;left:0;right:0;top:0;height:28%;transform-origin:50% 0;transform-style:preserve-3d;z-index:4}
 .env-flap.open{z-index:1}
 .env-flap>div{position:absolute;inset:0;backface-visibility:hidden;border-radius:4px 4px calc(var(--u)*6) calc(var(--u)*6)}
-.env-flap .fo{background:#b58f63 var(--t-kraft);background-size:600px;filter:brightness(1.03);box-shadow:0 calc(var(--u)*.6) calc(var(--u)*1.2) rgba(40,20,5,.35)}
-.env-flap .fi{background:#a8845a var(--t-kraft);background-size:600px;filter:brightness(.8);transform:rotateX(180deg)}
+.env-flap .fo{background:#b58f63 var(--t-kraft);background-size:600px;box-shadow:0 calc(var(--u)*.6) calc(var(--u)*1.2) rgba(40,20,5,.35)}
+.env-flap .fi{background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),#a8845a var(--t-kraft);background-size:auto,600px;transform:rotateX(180deg)}
 .f-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid #8e2b20;padding-bottom:calc(var(--u)*1);font-weight:500}
 .f-head b{font-size:1.6em}
 .f-sub{font-size:.82em;opacity:.85;margin:calc(var(--u)*.8) 0 calc(var(--u)*4)}
@@ -134,3 +134,18 @@ html:not(.js) .b-neg{display:none}
   .b-prints .print::before { display: none; }
 }
 @media (pointer: coarse) { .sleeve { box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 0 60px rgba(255, 246, 225, .2); } }
+
+/* the hero print fills its (explicitly sized) frame whatever has or hasn't loaded yet */
+.env .print.hero img { height: 100%; object-fit: cover; }
+/* the negatives sheet fades in when it is ready instead of popping in */
+.sleeve canvas:first-child { animation: sleeve-in .9s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes sleeve-in { from { opacity: 0 } to { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .sleeve canvas:first-child { animation: none; } }
+
+/* the envelope moves, fades and flips on every scroll frame: keep each piece on its own layer (a filter or a blend mode would force it to be repainted) */
+.env, .env-front, .env-back, .env-flap { will-change: transform, opacity; }
+@media (pointer: coarse) {
+  .stamp { mix-blend-mode: normal; -webkit-mask-image: none; mask-image: none; opacity: .8; }
+  .env-back { box-shadow: 0 30px 50px -22px rgba(0, 0, 0, .7); }
+  .env-flap .fo { box-shadow: none; }
+}

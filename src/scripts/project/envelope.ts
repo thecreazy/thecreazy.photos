@@ -8,7 +8,10 @@ export function envelope() {
   const env = $('.env'), flap = $('.env-flap'), hint = $('.b-hint'), hero = $('.print.hero'), stage = $('.b-hero');
   if (!env || !flap || !hint || !hero || !stage) return;
   const img = hero.querySelector('img')!;
-  const a = img.width / img.height || 1.5;
+  // the shape comes from the width/height attributes (the real photo's size, written at build time), never from the rendered image:
+  // before it has loaded the image is 0×0 and the box would be sized for a made-up ratio, leaving half of the photo outside its border
+  const iw = +(img.getAttribute('width') ?? 0), ih = +(img.getAttribute('height') ?? 0);
+  const a = iw && ih ? iw / ih : img.naturalWidth / img.naturalHeight || 1.5;
   let G = { vw: 0, vh: 0, ew: 0, eh: 0, pw: 0, ph: 0, sc: 1 };
 
   const coarse = matchMedia('(pointer: coarse)').matches;

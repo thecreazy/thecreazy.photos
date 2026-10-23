@@ -193,34 +193,32 @@ function negatives() {
   const selected: number[] = JSON.parse(sec.dataset.selected ?? '[]');
   const seed = hashStr(sec.dataset.slug ?? '');
   const per = innerWidth < 760 ? 3 : 6; // strips of three on phones, so the frames aren't tiny
-  const io = new IntersectionObserver((es) => {
-    if (!es[0].isIntersecting) return;
-    io.disconnect();
-    // decoded and shrunk off the main thread (the frames are painted ~180 px wide), then drawn row by row without blocking the scroll
-    (async () => {
-      // a handful at a time with a pause between: forty-odd decodes and resizes at once would stall the page that is being scrolled
-      await quiet(); // never in the middle of a swipe
-      const imgs: (ImageBitmap | null)[] = [];
-      for (let i = 0; i < film.length; i += 4) {
-        imgs.push(...await Promise.all(film.slice(i, i + 4).map((src) => fetch(src).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 360, resizeQuality: 'medium' })).catch(() => null))));
-        await new Promise<void>((r) => setTimeout(r, 30));
-      }
-      if (!imgs.some(Boolean)) return;
-      const input = { n: film.length, bw, imgs, selected, seed, per };
-      const neg = sleeveSheet(input, false);
-      host.style.aspectRatio = String(neg.aspect); // the space is kept while the sheet is drawn off screen, so nothing jumps when it appears
-      await neg.draw(); // drawn detached and put in the page in one go: a canvas that grows row by row is re-uploaded to the GPU on every frame
-      host.replaceChildren(neg.canvas);
-      // the positive (hover) version only exists where there is a hover
-      if (!matchMedia('(hover: hover)').matches) { imgs.forEach((b) => b?.close()); return; }
-      const pos = sleeveSheet(input, true);
-      await pos.draw();
-      host.append(pos.canvas);
-      imgs.forEach((b) => b?.close());
-      
-    })();
-  }, { rootMargin: '600px' });
-  io.observe(sec);
+  const hover = matchMedia('(hover: hover)').matches;
+  const build = async () => {
+    await quiet(); // never in the middle of a swipe
+    // decoded and shrunk off the main thread (the frames are painted ~180 px wide), a few at a time so the page stays free
+    const imgs: (ImageBitmap | null)[] = [];
+    const batch = hover ? 8 : 4;
+    for (let i = 0; i < film.length; i += batch) {
+      imgs.push(...await Promise.all(film.slice(i, i + batch).map((src) => fetch(src).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 360, resizeQuality: 'medium' })).catch(() => null))));
+      await new Promise<void>((r) => setTimeout(r, hover ? 0 : 30));
+    }
+    if (!imgs.some(Boolean)) return;
+    const input = { n: film.length, bw, imgs, selected, seed, per };
+    const neg = sleeveSheet(input, false);
+    host.style.aspectRatio = String(neg.aspect); // the space is kept while the sheet is drawn off screen, so nothing jumps when it appears
+    await neg.draw(); // drawn detached and put in the page in one go (it fades in, see project.css)
+    host.replaceChildren(neg.canvas);
+    // the positive (hover) version only exists where there is a hover
+    if (!hover) { imgs.forEach((b) => b?.close()); return; }
+    const pos = sleeveSheet(input, true);
+    await pos.draw();
+    host.append(pos.canvas);
+    imgs.forEach((b) => b?.close());
+  };
+  // built ahead of time, shortly after the page has settled, so it is there by the time you scroll down to it (phones wait a little longer: the envelope is playing)
+  const later = () => setTimeout(() => void build(), hover ? 600 : 2500);
+  if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
 }
 
 /* ───── the next envelope rises to the centre and becomes the new page ───── */
