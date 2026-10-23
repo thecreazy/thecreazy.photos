@@ -116,7 +116,11 @@ async function main() {
     const hx = p?.stop ? p.stop.x - S.scroll : p?.leader ? p.gx : -1e5;
     S.hoverX = hx < -1e4 ? -1e5 : S.hoverX < -1e4 ? hx : lerp(S.hoverX, hx, 0.3);
     const cursor = p && (p.stop || p.leader || p.seg.contact) ? 'pointer' : S.drag?.moved ? 'grabbing' : 'grab';
-    if (cursor !== lastCursor) { canvas.style.cursor = cursor; lastCursor = cursor; }
+    if (cursor !== lastCursor) {
+      canvas.style.cursor = cursor; lastCursor = cursor;
+      // the custom pointer (scripts/cursor.ts) reads this: a frame in the light says "develop", other hot spots close down to the pencil dot
+      document.documentElement.dataset.cursor = p?.stop && p.stop.k >= 0 ? 'develop' : cursor === 'pointer' ? 'hot' : cursor === 'grabbing' ? 'drag' : '';
+    }
     // neon flicker
     flickT -= dt;
     let fl = 1;

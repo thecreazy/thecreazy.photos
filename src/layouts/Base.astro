@@ -60,5 +60,9 @@ const light = bodyClass?.split(' ').includes('paper'); // Archive and Contact ar
     {/* keep this script byte-identical to the sha256 in vercel.json's Content-Security-Policy-Report-Only (tools/check.mjs verifies it) */}
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
-  <body class={bodyClass}><slot /></body>
+  <body class={bodyClass}><slot />
+    <script>
+      import '../scripts/cursor';
+    </script>
+  </body>
 </html>

@@ -73,6 +73,7 @@ export const t = {
     // profiles that describe the same person: they help search engines tie the portfolio to the name
     sameAs: ['https://www.instagram.com/thecrz/', 'https://canellariccardo.it', 'https://www.oltreilvisibile.art/it/photographers/riccardo-canella'],
   },
+  cursor: { develop: 'develop', view: 'view', skip: 'skip' },
   notFound: {
     code: '404',
     title: "This frame didn't come out",

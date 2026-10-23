@@ -25,3 +25,19 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 /* darkroom → shooting page: a slow, eased dissolve instead of the browser's quick default (type added on pageswap, home/main.ts) */
 html:active-view-transition-type(develop)::view-transition-group(root) { animation-duration: 1.1s; animation-timing-function: cubic-bezier(.45, 0, .2, 1); }
+
+/* the pointer (scripts/cursor.ts): a loupe ring that trails the mouse */
+html.cur, html.cur * { cursor: none !important; }
+#cur { position: fixed; left: 0; top: 0; z-index: 2147483647; pointer-events: none; opacity: 0; transition: opacity .25s; will-change: transform; --cur-c: rgba(239, 231, 218, .88); }
+body.paper #cur { --cur-c: #1d1a17; }
+#cur.on { opacity: 1; }
+#cur i { position: absolute; left: 0; top: 0; width: 34px; height: 34px; margin: -17px 0 0 -17px; box-sizing: border-box; border: 1.5px solid var(--cur-c); border-radius: 50%; box-shadow: 0 0 0 1px rgba(0, 0, 0, .18); transition: width .28s cubic-bezier(.3, .1, .2, 1), height .28s cubic-bezier(.3, .1, .2, 1), margin .28s cubic-bezier(.3, .1, .2, 1), background .2s, border-color .2s, transform .15s; }
+#cur u { position: absolute; left: -1.5px; top: -1.5px; width: 3px; height: 3px; border-radius: 50%; background: var(--cur-c); transition: opacity .2s; }
+#cur b { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); font: 400 19px/1 var(--pen); color: #fff7e8; white-space: nowrap; opacity: 0; transition: opacity .2s; text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
+#cur[data-state="hot"] i { width: 14px; height: 14px; margin: -7px 0 0 -7px; background: var(--red); border-color: var(--red); box-shadow: none; }
+#cur[data-state="hot"] u { opacity: 0; }
+#cur[data-state="label"] i, #cur[data-state="skip"] i { width: 78px; height: 78px; margin: -39px 0 0 -39px; background: rgba(196, 22, 42, .82); border-color: rgba(196, 22, 42, .95); box-shadow: none; }
+#cur[data-state="label"] u, #cur[data-state="skip"] u { opacity: 0; }
+#cur[data-state="label"] b, #cur[data-state="skip"] b { opacity: 1; }
+#cur[data-state="drag"] i { width: 22px; height: 22px; margin: -11px 0 0 -11px; }
+#cur.down i { transform: scale(.82); }
