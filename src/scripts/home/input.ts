@@ -1,6 +1,6 @@
 import { MathUtils, Raycaster, Vector2 } from 'three';
 import { CURVE, FH, FW, PITCH, STRIP_H } from './constants';
-import { goTo, nudge, step } from './motion';
+import { goTo, nearestStop, nudge, settle, step } from './motion';
 import { S } from './state';
 import type { Roll, Stop } from './types';
 
@@ -34,6 +34,8 @@ export function pickFilm(): Pick | null {
 }
 
 export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
+  let wheel: { from: Stop | null; dist: number; t: number } | null = null;
+  let track: { t: number; v: number }[] = [], start: { stop: Stop | null; at: number } | null = null;
   const click = () => {
     if (S.busy) return;
     const p = pickFilm();
@@ -50,12 +52,19 @@ export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
     e.preventDefault();
     if (S.busy) return;
     const k = e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? S.H : 1; // Firefox reports notched wheels in lines
-    nudge((Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * k * 0.32);
+    const mm = (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * k * 0.32;
+    if (!wheel) wheel = { from: nearestStop(S.target), dist: 0, t: 0 };
+    wheel.dist += mm;
+    nudge(mm);
+    // a gesture ends when the wheel (or the trackpad's coasting) has been quiet for a moment: then it lands on a frame, in the direction it went
+    clearTimeout(wheel.t);
+    wheel.t = window.setTimeout(() => { const w = wheel!; wheel = null; settle(w.from, w.dist, 0); }, 140);
   }, { passive: false });
   canvas.addEventListener('pointerdown', (e) => {
     if (e.button) return; // primary button / touch only
     S.mx = e.clientX; S.my = e.clientY; S.inside = true;
     S.drag = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, moved: false };
+    track = []; start = { stop: nearestStop(S.target), at: S.target };
     canvas.setPointerCapture(e.pointerId);
   });
   canvas.addEventListener('pointermove', (e) => {
@@ -64,12 +73,24 @@ export function initInput(canvas: HTMLCanvasElement, hooks: Hooks) {
     if (!d) return;
     if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 6) d.moved = true;
     if (d.moved) {
-      nudge(-(S.vertical ? e.clientY - d.ly : e.clientX - d.lx) * mmPerPx()); // finger up = film moves up = next frame
+      const mm = -(S.vertical ? e.clientY - d.ly : e.clientX - d.lx) * mmPerPx(); // finger up = film moves up = next frame
+      nudge(mm);
       d.lx = e.clientX; d.ly = e.clientY;
+      const now = performance.now();
+      track.push({ t: now, v: mm / Math.max(8, now - (track.at(-1)?.t ?? now - 16)) }); // never divide by less than a frame: coalesced events would fake a huge speed
+      track = track.filter((q) => now - q.t < 90);
     }
   });
   canvas.addEventListener('pointercancel', () => { S.drag = null; });
-  canvas.addEventListener('pointerup', () => { if (S.drag && !S.drag.moved) click(); S.drag = null; });
+  canvas.addEventListener('pointerup', () => {
+    const d = S.drag;
+    S.drag = null;
+    if (!d) return;
+    if (!d.moved) { click(); return; }
+    const vel = track.length ? track.reduce((a, q) => a + q.v, 0) / track.length : 0; // mm/ms over the last ~90 ms
+    if (performance.now() - (track.at(-1)?.t ?? 0) > 120) { settle(start?.stop ?? null, S.target - (start?.at ?? S.target), 0); return; } // held still before letting go
+    settle(start?.stop ?? null, S.target - (start?.at ?? S.target), vel);
+  });
   canvas.addEventListener('pointerleave', () => { S.inside = false; });
   addEventListener('keydown', (e) => {
     if (S.busy || e.repeat || e.altKey || e.ctrlKey || e.metaKey) return;

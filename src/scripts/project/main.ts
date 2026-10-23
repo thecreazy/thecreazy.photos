@@ -68,12 +68,15 @@ function prints() {
   list.forEach((f) => io.observe(f));
   const parallax = () => {
     const vh = innerHeight;
-    for (const f of list) {
-      const r = f.parentElement!.getBoundingClientRect();
-      if (r.bottom < -200 || r.top > vh + 200) continue;
+    // all the reads first, then all the writes: reading a rect after a style write forces a layout for every print
+    const reads = list.map((f) => f.parentElement!.getBoundingClientRect());
+    list.forEach((f, i) => {
+      const r = reads[i];
+      if (r.bottom < -200 || r.top > vh + 200) return;
       f.style.setProperty('--py', (-(r.top + r.height / 2 - vh / 2) * +f.dataset.depth!).toFixed(1) + 'px');
-    }
+    });
   };
+  if (matchMedia('(pointer: coarse)').matches) return; // a finger scrolls the page itself: the drift is barely visible and costs a style pass per print per frame
   let q = 0;
   addEventListener('scroll', () => { if (!q) q = requestAnimationFrame(() => { q = 0; parallax(); }); }, { passive: true });
   parallax();
@@ -111,6 +114,7 @@ function lightbox() {
   const build = () => {
     lb = document.createElement('div');
     lb.id = 'lb';
+    lb.setAttribute('data-lenis-prevent', ''); // the viewer is modal: the page behind must not scroll
     lb.setAttribute('role', 'dialog');
     lb.setAttribute('aria-modal', 'true');
     lb.setAttribute('aria-label', L.label);
@@ -170,6 +174,17 @@ function lightbox() {
 }
 
 /* ───── negatives: built once the section is near, from the small "film" variants ───── */
+/** Resolves once the page has not scrolled for a moment and the browser is idle. */
+function quiet() {
+  return new Promise<void>((resolve) => {
+    let t = 0;
+    const go = () => { removeEventListener('scroll', again); (window.requestIdleCallback ?? ((f: () => void) => setTimeout(f, 0)))(() => resolve()); };
+    const again = () => { clearTimeout(t); t = window.setTimeout(go, 300); };
+    addEventListener('scroll', again, { passive: true });
+    again();
+  });
+}
+
 function negatives() {
   const sec = $('#negatives'), host = $('#sleeve');
   if (!sec || !host) return;
@@ -181,15 +196,29 @@ function negatives() {
   const io = new IntersectionObserver((es) => {
     if (!es[0].isIntersecting) return;
     io.disconnect();
-    Promise.all(film.map((src) => new Promise<HTMLImageElement | null>((res) => {
-      const im = new Image();
-      im.onload = () => res(im);
-      im.onerror = () => res(null);
-      im.src = src;
-    }))).then((imgs) => {
+    // decoded and shrunk off the main thread (the frames are painted ~180 px wide), then drawn row by row without blocking the scroll
+    (async () => {
+      // a handful at a time with a pause between: forty-odd decodes and resizes at once would stall the page that is being scrolled
+      await quiet(); // never in the middle of a swipe
+      const imgs: (ImageBitmap | null)[] = [];
+      for (let i = 0; i < film.length; i += 4) {
+        imgs.push(...await Promise.all(film.slice(i, i + 4).map((src) => fetch(src).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 360, resizeQuality: 'medium' })).catch(() => null))));
+        await new Promise<void>((r) => setTimeout(r, 30));
+      }
       if (!imgs.some(Boolean)) return;
-      host.replaceChildren(sleeveSheet({ n: film.length, bw, imgs, selected, seed, per }, false), sleeveSheet({ n: film.length, bw, imgs, selected, seed, per }, true));
-    });
+      const input = { n: film.length, bw, imgs, selected, seed, per };
+      const neg = sleeveSheet(input, false);
+      host.style.aspectRatio = String(neg.aspect); // the space is kept while the sheet is drawn off screen, so nothing jumps when it appears
+      await neg.draw(); // drawn detached and put in the page in one go: a canvas that grows row by row is re-uploaded to the GPU on every frame
+      host.replaceChildren(neg.canvas);
+      // the positive (hover) version only exists where there is a hover
+      if (!matchMedia('(hover: hover)').matches) { imgs.forEach((b) => b?.close()); return; }
+      const pos = sleeveSheet(input, true);
+      await pos.draw();
+      host.append(pos.canvas);
+      imgs.forEach((b) => b?.close());
+      
+    })();
   }, { rootMargin: '600px' });
   io.observe(sec);
 }

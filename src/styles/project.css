@@ -124,3 +124,13 @@ html:not(.js) .b-neg{display:none}
 /* desktop vs touch wording */
 .h-t{display:none}
 @media (pointer:coarse){.h-d{display:none}.h-t{display:inline}}
+
+/* touch screens: the same look with far fewer things to repaint while the page scrolls under a finger */
+@media (pointer: coarse) {
+  .b-bg::after { display: none; }
+  .print { box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 30px -12px rgba(0, 0, 0, .65); }
+  .b-prints .print { transition: --in .9s cubic-bezier(.2, .75, .25, 1); }
+  html.js .b-prints .print:not(.laid) { box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 16px 30px -12px rgba(0, 0, 0, .65); }
+  .b-prints .print::before { display: none; }
+}
+@media (pointer: coarse) { .sleeve { box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 0 60px rgba(255, 246, 225, .2); } }
