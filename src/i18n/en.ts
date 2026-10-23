@@ -63,10 +63,15 @@ export const t = {
     tagline: 'A roll of film, one envelope for every shoot.',
   },
   meta: {
-    home: 'Photography by Riccardo Canella: portraits, projects and travels, as a roll of film and a lab envelope for every shoot.',
+    home: 'Photography by Riccardo Canella, Milan: portraits, projects and travels. “I photograph what is about to disappear.”',
     archive: 'Every roll: the full list of shoots by Riccardo Canella, by section.',
     contact: 'Get in touch with Riccardo Canella for a portrait, a project or a coffee.',
     shooting: (title: string, section: string, date: string, note?: string) => `${title} — ${section}, ${date}.${note ? ` ${note}` : ''}`,
+  },
+  person: {
+    job: 'Photographer',
+    // profiles that describe the same person: they help search engines tie the portfolio to the name
+    sameAs: ['https://www.instagram.com/thecrz/', 'https://canellariccardo.it', 'https://www.oltreilvisibile.art/it/photographers/riccardo-canella'],
   },
   notFound: {
     code: '404',
@@ -77,9 +82,11 @@ export const t = {
   contact: {
     title: 'Write to me',
     sub: 'for a portrait, a project, a coffee',
-    // real details to be provided by Riccardo — the lines are hidden while empty
-    email: '',
-    instagram: '',
-    place: '',
+    // a line left empty is hidden on the page
+    // from the artist's own page on Oltre il Visibile (translated from Italian)
+    statement: 'I photograph what is about to disappear: the moment before a person goes back to being only themselves.',
+    email: 'canella_riccardo@icloud.com',
+    instagram: '@thecrz',
+    place: 'Based in Milan, Italy',
   },
 } as const;

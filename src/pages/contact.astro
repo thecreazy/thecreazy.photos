@@ -3,12 +3,13 @@ import '../styles/pages.css';
 import Base from '../layouts/Base.astro';
 import { t } from '../i18n/en';
 
-const { email, instagram, place } = t.contact;
+const { email, instagram, place, statement } = t.contact;
 ---
-<Base title={t.nav.contact} description={t.meta.contact} bodyClass="paper">
+<Base person title={t.nav.contact} description={t.meta.contact} bodyClass="paper">
   <main class="pg">
     <div class="pg-top"><a href="/">{t.project.back}</a><span>{t.nav.contact.toLowerCase()}</span></div>
     <h1>{t.contact.title}<em>{t.contact.sub}</em></h1>
+    <p class="statement">{statement}</p>
     <div class="contact">
       {email && <a href={`mailto:${email}`}>{email}</a>}{email && <br />}
       {instagram && <a href={`https://instagram.com/${instagram.replace('@', '')}`}>{instagram}</a>}

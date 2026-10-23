@@ -12,13 +12,18 @@ import monoFont from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-no
 import '../styles/tokens.css';
 import { t } from '../i18n/en';
 
-interface Props { title?: string; description?: string; noindex?: boolean; bodyClass?: string; htmlClass?: string; image?: string; imageAlt?: string }
-const { title, description, noindex = false, bodyClass, htmlClass, image = '/og/site.jpg', imageAlt = `${t.brand} — ${t.brandSub}` } = Astro.props;
+interface Props { person?: boolean; title?: string; description?: string; noindex?: boolean; bodyClass?: string; htmlClass?: string; image?: string; imageAlt?: string }
+const { person = false, title, description, noindex = false, bodyClass, htmlClass, image = '/og/site.jpg', imageAlt = `${t.brand} — ${t.brandSub}` } = Astro.props;
 const full = title ? `${title} — ${t.brand}` : `${t.brand} — ${t.brandSub}`;
 const site = Astro.site ?? new URL('https://photos.canellariccardo.it');
 const canonical = new URL(Astro.url.pathname, site).href;
 const imageUrl = new URL(image, site).href;
 const adult = Astro.url.pathname.startsWith('/erotic/'); // not a gate: lets SafeSearch / parental filters classify the page
+const ld = person ? JSON.stringify({
+  '@context': 'https://schema.org', '@type': 'Person', name: t.brand, url: site.href, jobTitle: t.person.job,
+  description: t.contact.statement, image: imageUrl, sameAs: t.person.sameAs,
+  ...(t.contact.place && { homeLocation: { '@type': 'Place', name: 'Milan, Italy' } }),
+}).replace(/</g, '\\u003c') : '';
 const light = bodyClass?.split(' ').includes('paper'); // Archive and Contact are the light pages
 ---
 <!doctype html>
@@ -51,6 +56,7 @@ const light = bodyClass?.split(' ').includes('paper'); // Archive and Contact ar
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {ld && <script type="application/ld+json" set:html={ld} />}
     {/* keep this script byte-identical to the sha256 in vercel.json's Content-Security-Policy-Report-Only (tools/check.mjs verifies it) */}
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
