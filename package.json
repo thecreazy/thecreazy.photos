@@ -10,7 +10,7 @@
     "prebuild": "node tools/check.mjs",
     "build": "astro build",
     "check": "node tools/check.mjs",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "astro sync && tsc --noEmit",
     "preview": "astro preview",
     "astro": "astro",
     "foto": "tsx tools/foto.mjs",
