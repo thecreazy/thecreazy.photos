@@ -59,6 +59,13 @@ for (let i = 0, p = 0; i < others.length; p++) {
   </section>
   <noscript><div class="print-hero-static"><PrintFigure shooting={s} index={heroIdx} kind="hero" eager /></div></noscript>
 
+  {s.statement && (
+    <section class="b-statement" id="statement">
+      <div class="b-label"><h2>{t.project.statement}</h2></div>
+      <div class="st">{s.statement.map((p) => <p>{p}</p>)}</div>
+    </section>
+  )}
+
   <section class="b-neg" id="negatives" data-slug={s.slug} data-bw={String(!!s.bw)}
     data-selected={JSON.stringify(s.selected.map((i) => i - 1))}
     data-film={JSON.stringify(s.photos.map((f) => filmUrl(s.slug, f)))}>

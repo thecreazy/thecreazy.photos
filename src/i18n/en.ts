@@ -45,6 +45,7 @@ export const t = {
   project: {
     back: '← roll',
     hint: 'pull the print out ↓',
+    statement: 'the statement',
     negatives: 'the negatives',
     negativesHint: 'hover to see them as positives · marked in red: the picks',
     negativesHintTouch: 'marked in red: the picks',

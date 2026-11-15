@@ -7,7 +7,7 @@ import { FILM_FS, FILM_VS } from './shaders';
 import type { Roll, RollData, Seg, Stop, Zone } from './types';
 import { t } from '../../i18n/en';
 
-const ZONE_ORDER = ['models', 'projects', 'travels', 'erotic'] as const;
+const ZONE_ORDER = ['projects', 'models', 'travels', 'erotic'] as const;
 const blank = () => { const c = document.createElement('canvas'); c.width = c.height = 1; return new CanvasTexture(c); };
 
 export function makeRolls(data: RollData[]): Roll[] {

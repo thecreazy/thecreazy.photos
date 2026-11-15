@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-export const SECTIONS = ['models', 'projects', 'travels', 'erotic'] as const;
+export const SECTIONS = ['projects', 'models', 'travels', 'erotic'] as const;
 
 const shooting = defineCollection({
   loader: glob({ pattern: '*/index.md', base: './src/content/shooting' }),
@@ -20,6 +20,7 @@ const shooting = defineCollection({
       hero: z.number().int().positive().optional(),
       photos: z.array(z.string()).min(1),
       note: z.string().optional(),
+      statement: z.array(z.string()).optional(), // longer text for the project page, one string per paragraph
       envelope: z.number().int().positive().optional(), // envelope number printed on the page; default 100 + position in the site-wide order
       alts: z.record(z.string(), z.string()).optional(), // optional alt text per photo: filename → text (generic "Name, frame N" when missing)
       noindex: z.boolean().optional(), // keep this shooting's page out of search engines and the sitemap (the page stays online)

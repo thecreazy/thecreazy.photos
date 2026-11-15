@@ -7,7 +7,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { cdnOrigin, scriptHash } from './lib/headers.mjs';
 
 const STRICT = process.argv.includes('--strict');
-const SECTIONS = ['models', 'projects', 'travels', 'erotic'];
+const SECTIONS = ['projects', 'models', 'travels', 'erotic'];
 const errors = [], warnings = [];
 const err = (m) => errors.push(m), warn = (m) => warnings.push(m);
 // what the latin subsets of the site fonts cover that we use (Latin-1, general punctuation, €, ™)
