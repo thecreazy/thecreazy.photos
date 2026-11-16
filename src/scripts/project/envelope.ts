@@ -35,7 +35,10 @@ export function envelope() {
     const hw = Math.min(vw * 0.86, vh * 0.84 * (pw / ph));
     G = { vw, vh, ew, eh, pw, ph, sc: hw / pw };
     env.style.cssText = `width:${ew}px;height:${eh}px;aspect-ratio:auto;--u:${ew / 100}px`;
-    for (const [k, v] of Object.entries({ width: `${pw}px`, height: `${ph}px`, padding: `${bord}px`, left: `${(ew - pw) / 2}px`, top: `${eh * 0.05}px` })) hero.style.setProperty(k, v);
+    // the print is laid out at the size it ends up (G.sc times the size it has in the envelope) and only ever scaled *down* from there:
+    // a layer that grows has to be painted again at every new scale (that is what made it stutter on older iOS), one that shrinks keeps its pixels
+    const PW = pw * G.sc, PH = ph * G.sc;
+    for (const [k, v] of Object.entries({ width: `${PW}px`, height: `${PH}px`, padding: `${bord * G.sc}px`, left: `${(ew - PW) / 2}px`, top: `${eh * 0.05 + (ph - PH) / 2}px` })) hero.style.setProperty(k, v);
     stage.style.height = `${vh * 2.3}px`;
     if (ne) ne.style.cssText = `width:${ew}px;height:${eh}px;--u:${ew / 100}px`;
     if (handedOff) hand(); // the keyframes hold pixel distances: sample them again for the new size
@@ -54,7 +57,7 @@ export function envelope() {
       f, r, fade: 1 - d * 0.9, hint: 1 - smooth(0.15, 0.3, pp),
       flap: `rotateX(${(f * 178).toFixed(1)}deg)`,
       env: `translateY(${(G.vh * 0.04 + envY).toFixed(1)}px)`,
-      hero: `translateY(${cy.toFixed(1)}px) scale(${s.toFixed(4)}) rotate(${((1 - hz) * -1.2).toFixed(2)}deg)`,
+      hero: `translateY(${cy.toFixed(1)}px) scale(${(s / G.sc).toFixed(4)}) rotate(${((1 - hz) * -1.2).toFixed(2)}deg)`,
     };
   };
 
