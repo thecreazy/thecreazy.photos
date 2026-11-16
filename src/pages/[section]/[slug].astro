@@ -70,7 +70,7 @@ for (let i = 0, p = 0; i < others.length; p++) {
     data-selected={JSON.stringify(s.selected.map((i) => i - 1))}
     data-film={JSON.stringify(s.photos.map((f) => filmUrl(s.slug, f)))}>
     <div class="b-label"><h2>{t.project.negatives}</h2><small><span class="h-d">{t.project.negativesHint}</span><span class="h-t">{t.project.negativesHintTouch}</span></small></div>
-    <div class="sleeve" id="sleeve" role="img" aria-label={t.project.negativesSheet(s.photos.length)}></div>
+    <div class="sleeve" id="sleeve" role="img" aria-label={t.project.negativesSheet(s.photos.length)}><span class="sleeve-wait" aria-hidden="true">{t.project.negativesWait}</span></div>
   </section>
 
   <section class="b-prints" id="bprints">

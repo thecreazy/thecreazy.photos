@@ -43,4 +43,5 @@ const set = (ext: 'avif' | 'webp') => WIDTHS.map((w) => `${photoUrl(s.slug, file
       style={await blurStyle(s.slug, file)}
     />
   </picture>
+  {kind !== 'hero' && s.captions?.[file] && <figcaption>{s.captions[file]}</figcaption>}
 </figure>

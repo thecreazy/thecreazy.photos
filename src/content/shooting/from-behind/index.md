@@ -26,6 +26,18 @@ statement:
   - "This series brings together eleven photographs taken between 2020 and 2026 in Italy, the United States and Spain. Most are real moments, caught as they happened: my mother cooking, a man kneeling at an altar, a couple holding each other during a protest."
   - "No one looks at the camera. And yet you can still tell when someone is waiting, tired, carrying a weight or letting it go. Shoulders close, heads drop, hands look for something to hold. The face is the part of ourselves we learn to control. The back is not."
   - "I would like those who look at these photographs to stop asking who these people are and start asking what they feel, and perhaps to recognise themselves in one of them."
+captions:
+  01.jpg: "Victoria, New York, 2025"
+  02.jpg: "New York, 2025"
+  03.jpg: "My mother, in the kitchen, 2026"
+  04.jpg: "Marsala, 2020"
+  05.jpg: "Naples, 2021"
+  06.jpg: "Leoncavallo, Milan, 2025"
+  07.jpg: "Silvia Amati, in the studio, 2021"
+  08.jpg: "Victoria, Turin, 2025"
+  09.jpg: "Luca, Fuerteventura, 2020"
+  10.jpg: "Sicily, 2021"
+  11.jpg: "Porto Garibaldi, 2021"
 alts:
   01.jpg: "A silhouette behind a shower curtain, New York, 2025."
   02.jpg: "A man kneeling in front of an altar in a church, New York, 2025."

@@ -16,6 +16,9 @@
 @property --sh{syntax:'<number>';inherits:false;initial-value:0}
 .print{margin:0;background:#f4f1ea var(--t-paper);background-size:500px;padding:1.4%;box-shadow:0 1px 2px rgba(0,0,0,.4),0 14px 30px -10px rgba(0,0,0,.6),0 40px 80px -30px rgba(0,0,0,.7);transform:rotate(var(--rot,0deg));cursor:zoom-in;position:relative}
 .print img{display:block;width:100%;height:auto}
+.print figcaption{position:absolute;left:1.4%;right:0;top:100%;padding-top:10px;font:400 26px/1.1 var(--pen);color:#bdb2a3;pointer-events:none}
+#lb .lb-cap{position:absolute;left:0;right:0;bottom:14px;text-align:center;font:400 28px/1.1 var(--pen);color:#d8cfc0;text-shadow:0 1px 3px rgba(0,0,0,.7);pointer-events:none}
+#lb.cap>img{max-height:84vh;max-height:84svh}
 .print::after{content:'';position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.14),rgba(255,255,255,0) 35%,rgba(0,0,0,.04));pointer-events:none}
 .b-prints .print{--py:0px;opacity:var(--in);transform:translateY(calc(var(--py) + (1 - var(--in)) * -46px)) perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) rotate(calc(var(--rot) + (1 - var(--in)) * 5deg)) scale(calc(var(--s) + (1 - var(--in)) * .07));
   transition:--rx .5s cubic-bezier(.2,.7,.2,1),--ry .5s cubic-bezier(.2,.7,.2,1),--s .5s cubic-bezier(.2,.7,.2,1),--in 1.1s cubic-bezier(.2,.75,.25,1),--sh .4s,box-shadow .5s}
@@ -65,8 +68,7 @@ html.js .b-prints .print:not(.laid){--in:0;box-shadow:0 40px 90px -20px rgba(0,0
 .b-statement .st p:first-child{font-size:27px;line-height:1.35;color:#f1eadc}
 @media (max-width:700px){.b-statement .st{font-size:20px}.b-statement .st p:first-child{font-size:24px}}
 .b-neg{max-width:1100px;margin:6vh auto 0;padding:0 24px}
-.sleeve{position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 60px rgba(255,246,225,.22),0 0 220px rgba(255,236,200,.14);background:#f3f1ea;min-height:200px}
-.sleeve:has(canvas){min-height:0}
+.sleeve{position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 60px rgba(255,246,225,.22),0 0 220px rgba(255,236,200,.14);background:#f3f1ea}
 .sleeve canvas{display:block;width:100%;height:auto}
 .sleeve canvas+canvas{position:absolute;inset:0;opacity:0;transition:opacity .5s}
 .sleeve:hover canvas+canvas{opacity:1}
@@ -99,7 +101,10 @@ body.project{background:#141211;color:#e9e1d3;min-height:100vh;min-height:100svh
 .project .b-hero{height:230vh;height:230svh}
 .project .env{width:min(86vw,53.2vh,532px);aspect-ratio:76/100;--u:calc(min(86vw,53.2vh,532px)/100)}
 .project .next-env{width:min(86vw,53.2vh,532px);height:calc(min(86vw,53.2vh,532px)/.76);--u:calc(min(86vw,53.2vh,532px)/100)}
-.sleeve:empty{display:none}
+html:not(.js) .sleeve{display:none}
+.sleeve-wait{position:absolute;inset:0;display:grid;place-items:center;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8a8074;animation:sleeve-wait 1.6s ease-in-out infinite}
+@keyframes sleeve-wait{50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){.sleeve-wait{animation:none}}
 .print picture{display:block}
 .print.drop-off{--in:1}
 .print-hero-static{display:none}

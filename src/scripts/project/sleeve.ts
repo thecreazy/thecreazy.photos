@@ -49,12 +49,18 @@ function mark(x: CanvasRenderingContext2D, kind: Mark, fx: number, fy: number, w
   }
 }
 
+const S = 5, PH = 44, MX = 22, MY = 14;
+const dims = (total: number, per: number) => {
+  const rows = Math.ceil(total / per), STRIP_W = 3 + per * PITCH + 1;
+  return { rows, STRIP_W, w: (STRIP_W + MX * 2) * S, h: (rows * PH + MY * 2) * S };
+};
+/** width / height of the sheet, known before any frame has loaded: lets the page keep its room while the negatives are being made. */
+export const sleeveAspect = (total: number, per: number) => { const d = dims(total, per); return d.w / d.h; };
+
 /** The canvas is sized at once (the page doesn't jump); `draw()` fills it in, a row at a time. */
 export function sleeveSheet({ n: total, bw, imgs, selected, seed, per = 6 }: SleeveInput, pos: boolean) {
-  const STRIP_W = 3 + per * PITCH + 1;
+  const { rows, STRIP_W, w, h } = dims(total, per);
   const picks = new Map([...selected].sort((a, b) => a - b).map((i, k) => [i, MARKS[(seed + k) % MARKS.length]] as const));
-  const S = 5, rows = Math.ceil(total / per), PH = 44, MX = 22, MY = 14;
-  const w = (STRIP_W + MX * 2) * S, h = (rows * PH + MY * 2) * S;
   const c = cvs(w, h), x = c.getContext('2d')!;
   const draw = async () => {
     let g = x.createRadialGradient(w * 0.5, h * 0.45, 0, w * 0.5, h * 0.5, w * 0.7);

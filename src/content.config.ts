@@ -22,6 +22,7 @@ const shooting = defineCollection({
       note: z.string().optional(),
       statement: z.array(z.string()).optional(), // longer text for the project page, one string per paragraph
       envelope: z.number().int().positive().optional(), // envelope number printed on the page; default 100 + position in the site-wide order
+      captions: z.record(z.string(), z.string()).optional(), // optional caption per photo (where / when): filename → text, shown under the print
       alts: z.record(z.string(), z.string()).optional(), // optional alt text per photo: filename → text (generic "Name, frame N" when missing)
       noindex: z.boolean().optional(), // keep this shooting's page out of search engines and the sitemap (the page stays online)
     })
@@ -29,6 +30,7 @@ const shooting = defineCollection({
       message: 'selected: index out of range',
     })
     .refine((d) => !d.hero || d.hero <= d.photos.length, { message: 'hero: index out of range' })
+    .refine((d) => !d.captions || Object.keys(d.captions).every((f) => d.photos.includes(f)), { message: 'captions: filename not in photos' })
     .refine((d) => !d.alts || Object.keys(d.alts).every((f) => d.photos.includes(f)), { message: 'alts: filename not in photos' }),
 });
 

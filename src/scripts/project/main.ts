@@ -1,7 +1,7 @@
 import { clamp, hashStr, lerp, smooth } from '../../lib/rng';
 import { t } from '../../i18n/en';
 import { envelope } from './envelope';
-import { sleeveSheet } from './sleeve';
+import { sleeveAspect, sleeveSheet } from './sleeve';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -86,7 +86,7 @@ function prints() {
 function lightbox() {
   const L = t.project.lightbox;
   const figs = [...document.querySelectorAll<HTMLElement>('.print')].filter((f) => !f.closest('.next-env'));
-  let lb: HTMLDivElement | null = null, img: HTMLImageElement, closeBtn: HTMLButtonElement;
+  let lb: HTMLDivElement | null = null, img: HTMLImageElement, closeBtn: HTMLButtonElement, capEl: HTMLDivElement;
   let at = -1, opener: HTMLElement | null = null, locked: { overflow: string; pad: string } | null = null;
   const dimmed: HTMLElement[] = [];
 
@@ -109,6 +109,8 @@ function lightbox() {
     const fig = figs[at];
     img.src = fig.dataset.full!;
     img.alt = fig.querySelector('img')?.alt ?? '';
+    const cap = fig.querySelector('figcaption')?.textContent ?? '';
+    capEl.textContent = cap; lb!.classList.toggle('cap', !!cap);
   };
 
   const build = () => {
@@ -121,7 +123,8 @@ function lightbox() {
     lb.inert = true;
     img = new Image();
     closeBtn = btn('lb-close', L.close, '×', close);
-    lb.append(img, closeBtn);
+    capEl = document.createElement('div'); capEl.className = 'lb-cap';
+    lb.append(img, capEl, closeBtn);
     if (figs.length > 1) lb.append(btn('lb-prev', L.prev, '←', () => show(at - 1)), btn('lb-next', L.next, '→', () => show(at + 1)));
     lb.onclick = (e) => { if (e.target === lb || e.target === img) close(); };
     document.body.append(lb);
@@ -194,6 +197,7 @@ function negatives() {
   const seed = hashStr(sec.dataset.slug ?? '');
   const per = innerWidth < 760 ? 3 : 6; // strips of three on phones, so the frames aren't tiny
   const hover = matchMedia('(hover: hover)').matches;
+  host.style.aspectRatio = String(sleeveAspect(film.length, per)); // the sheet's room is reserved right away (with a "developing" note in it), so nothing below jumps when it arrives
   const build = async () => {
     await quiet(); // never in the middle of a swipe
     // decoded and shrunk off the main thread (the frames are painted ~180 px wide), a few at a time so the page stays free
@@ -203,10 +207,9 @@ function negatives() {
       imgs.push(...await Promise.all(film.slice(i, i + batch).map((src) => fetch(src).then((r) => r.blob()).then((b) => createImageBitmap(b, { resizeWidth: 360, resizeQuality: 'medium' })).catch(() => null))));
       await new Promise<void>((r) => setTimeout(r, hover ? 0 : 30));
     }
-    if (!imgs.some(Boolean)) return;
+    if (!imgs.some(Boolean)) { host.style.display = 'none'; return; } // nothing to show: drop the placeholder
     const input = { n: film.length, bw, imgs, selected, seed, per };
     const neg = sleeveSheet(input, false);
-    host.style.aspectRatio = String(neg.aspect); // the space is kept while the sheet is drawn off screen, so nothing jumps when it appears
     await neg.draw(); // drawn detached and put in the page in one go (it fades in, see project.css)
     host.replaceChildren(neg.canvas);
     // the positive (hover) version only exists where there is a hover
